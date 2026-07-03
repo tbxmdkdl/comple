@@ -87,3 +87,19 @@ export {
 } from "./reward";
 
 export type { RewardDeckZoneName } from "./reward";
+
+export {
+  addCardToRunDeck,
+  createFixedRunNodes,
+  getCurrentRunNode,
+  getNextScenarioIndex,
+  getPhaseAfterScenarioOutcome,
+  getRunProgress,
+  resetRunDeck,
+} from "./run";
+
+export type {
+  FixedRunNode,
+  FixedRunPhase,
+  FixedRunProgress,
+} from "./run";

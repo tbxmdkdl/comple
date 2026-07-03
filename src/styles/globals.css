@@ -90,11 +90,86 @@ p {
 .scenario-status,
 .hand-panel,
 .reward-panel,
+.run-progress,
 .side-panel {
   border: 1px solid #d3dce3;
   border-radius: 8px;
   background: #ffffff;
   box-shadow: 0 14px 32px rgb(24 32 42 / 7%);
+}
+
+.run-progress {
+  padding: 16px 18px;
+  display: grid;
+  grid-template-columns: minmax(140px, 0.7fr) minmax(0, 2fr) auto;
+  align-items: center;
+  gap: 16px;
+}
+
+.run-progress strong {
+  display: block;
+  color: #18202a;
+}
+
+.run-track {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  list-style: none;
+}
+
+.run-step {
+  min-height: 52px;
+  padding: 8px 10px;
+  border: 1px solid #dce3e8;
+  border-radius: 8px;
+  background: #fbfcfd;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #556372;
+}
+
+.run-step span {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  background: #e7edf1;
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.run-step strong {
+  font-size: 0.88rem;
+}
+
+.run-step.current {
+  border-color: #467a75;
+  background: #edf7f2;
+}
+
+.run-step.current span,
+.run-step.complete span {
+  background: #27645f;
+  color: #ffffff;
+}
+
+.run-phase-chip {
+  width: fit-content;
+  max-width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #c7d2da;
+  border-radius: 999px;
+  background: #f6f8f9;
+  color: #27414d;
+  font-size: 0.88rem;
+  font-weight: 900;
+  line-height: 1.25;
 }
 
 .scenario-panel {
@@ -260,6 +335,40 @@ p {
 .reward-panel,
 .side-panel {
   padding: 18px;
+}
+
+.state-panel {
+  padding: 22px;
+  border: 1px solid #d3dce3;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 14px 32px rgb(24 32 42 / 7%);
+}
+
+.state-panel h2 {
+  margin-bottom: 8px;
+  font-size: 1.6rem;
+}
+
+.state-panel p:not(.eyebrow) {
+  max-width: 680px;
+  color: #566473;
+}
+
+.state-panel.success {
+  border-color: #8cc0a7;
+  background: #f4fbf7;
+}
+
+.state-panel.failure {
+  border-color: #d99a9a;
+  background: #fff6f6;
+}
+
+.state-actions {
+  margin-top: 18px;
+  display: flex;
+  gap: 10px;
 }
 
 .section-heading {
@@ -559,6 +668,8 @@ p {
 @media (max-width: 960px) {
   .resource-panel,
   .reward-options,
+  .run-progress,
+  .run-track,
   .signal-grid,
   .play-area {
     grid-template-columns: 1fr;
@@ -578,6 +689,7 @@ p {
   .reward-footer,
   .reward-heading,
   .section-heading,
+  .state-actions,
   .outcome-banner {
     align-items: stretch;
     flex-direction: column;

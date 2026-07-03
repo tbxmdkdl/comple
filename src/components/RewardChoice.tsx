@@ -57,8 +57,8 @@ export function RewardChoice({
           <p className="eyebrow">상황 해결 보상</p>
           <h2>새 조치 카드 선택</h2>
           <p>
-            이번 선택은 데모 덱에 유지됩니다. 다음 상황 연결은 아직 준비 중이라,
-            선택 후 같은 상황을 업데이트된 덱으로 다시 연습합니다.
+            이번 선택은 런 덱에 유지됩니다. 다음 상황은 업데이트된 덱으로
+            시작합니다.
           </p>
         </div>
         <strong className="deck-size-chip">현재 덱 {deckSize}장</strong>
@@ -103,7 +103,7 @@ export function RewardChoice({
           onClick={onContinue}
           type="button"
         >
-          업데이트된 덱으로 다시 연습
+          다음 상황으로 진행
         </button>
       </div>
     </section>
