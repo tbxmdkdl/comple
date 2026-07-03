@@ -37,22 +37,24 @@ git commit -m "ticket XX: short description"
 Paste this before each implementation ticket:
 
 ```text
-Before implementing, read AGENTS.md and docs/PROJECT_BRIEF.md.
+Language rule: Respond to the user in Korean. Keep code identifiers, filenames, commands, package names, and APIs in English. Create user-facing game text in Korean unless this ticket explicitly says otherwise.
+
+Before implementing, read AGENTS.md, docs/PROJECT_BRIEF.md, docs/DESIGN_DIRECTION.md, and docs/KOREAN_CONTENT_STYLE.md.
 Use them as guardrails only.
 Implement only the requested ticket below.
-Do not expand scope based on the full project brief.
+Do not expand scope based on the full project brief or guardrail documents.
 Preserve the current architecture and naming conventions unless this ticket explicitly asks for a change.
-If the brief conflicts with the existing implementation, complete the ticket using the existing implementation as the technical source of truth and mention the conflict in your summary.
+If the brief or guardrail documents conflict with the existing implementation, complete the ticket using the existing implementation as the technical source of truth and mention the conflict in your Korean summary.
 
 Before coding:
 - inspect the relevant files
-- propose a short implementation plan
+- propose a short implementation plan in Korean
 - wait for confirmation if the plan changes the requested scope
 
 After coding:
-- summarize changed files
+- summarize changed files in Korean
 - list commands/tests run
-- list remaining risks
+- list remaining risks in Korean
 ```
 
 ## Do Not Do This

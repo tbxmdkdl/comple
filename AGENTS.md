@@ -6,6 +6,15 @@ This repository is a fresh 2-week MVP for a compliance training card game.
 
 The game should help players practice workplace compliance judgment through meaningful card-based decisions. It should feel like a real game, not a quiz, not a static training slide, and not a legal advice tool.
 
+## Language Policy
+
+- Always respond to the user in Korean.
+- Write plans, summaries, risks, review comments, and questions in Korean.
+- Keep code identifiers, filenames, folder names, package names, command names, and APIs in English.
+- User-facing game text must be Korean unless a ticket explicitly says otherwise.
+- Compliance learning feedback must be Korean, practical, concise, and non-preachy.
+- Do not translate TypeScript type names, function names, test names, package names, or terminal commands into Korean.
+
 ## Product Direction
 
 Build a short, replayable, card-based decision game about realistic workplace dilemmas.

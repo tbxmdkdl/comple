@@ -1,3 +1,5 @@
+Language rule: Respond to the user in Korean. Keep code identifiers, filenames, commands, package names, and APIs in English. Create user-facing game text in Korean unless this ticket explicitly says otherwise.
+
 Goal:
 QA, balance, and polish the MVP for an internal demo.
 
