@@ -353,6 +353,33 @@ export interface LearningFeedback {
   relatedScenarioIds?: GameId[];
 }
 
+export type FinalReportOutcome = "completed" | "failed";
+export type FinalReportGrade = "A" | "B" | "C" | "D";
+export type FinalReportDecisionType = "card" | "event" | "reward" | "scenario";
+
+export interface FinalReportKeyDecision {
+  id: GameId;
+  type: FinalReportDecisionType;
+  label: string;
+  detail: string;
+}
+
+export interface FinalReport {
+  outcome: FinalReportOutcome;
+  grade: FinalReportGrade;
+  gradeLabel: string;
+  score: number;
+  headline: string;
+  riskSummary: string;
+  strongestBehavior: string;
+  improvementArea: string;
+  keyDecisions: FinalReportKeyDecision[];
+  recommendedTopics: string[];
+  takeaways: string[];
+  metrics: Pick<PlayerResources, "risk" | "evidence" | "trust" | "pressure">;
+  scenariosCompleted: number;
+}
+
 export interface DecisionLogEntry {
   id: GameId;
   type: DecisionType;

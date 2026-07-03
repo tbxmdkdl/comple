@@ -22,6 +22,11 @@ export type {
   EventChoice,
   EventEffect,
   EventResourceEffect,
+  FinalReport,
+  FinalReportDecisionType,
+  FinalReportGrade,
+  FinalReportKeyDecision,
+  FinalReportOutcome,
   GameId,
   LearningFeedback,
   LearningFeedbackTrigger,
@@ -125,3 +130,7 @@ export type {
   ApplyEventChoiceResult,
   EventRunMemory,
 } from "./events";
+
+export { generateFinalReport } from "./report";
+
+export type { GenerateFinalReportInput } from "./report";

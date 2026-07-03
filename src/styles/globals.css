@@ -89,6 +89,7 @@ p {
 .scenario-panel,
 .scenario-status,
 .event-panel,
+.final-report,
 .hand-panel,
 .reward-panel,
 .run-progress,
@@ -365,6 +366,165 @@ p {
 .state-panel.failure {
   border-color: #d99a9a;
   background: #fff6f6;
+}
+
+.final-report {
+  padding: 20px;
+  display: grid;
+  gap: 16px;
+}
+
+.report-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 160px;
+  gap: 18px;
+  align-items: stretch;
+}
+
+.report-hero h2 {
+  margin-bottom: 8px;
+  font-size: 1.7rem;
+}
+
+.report-hero p {
+  margin-bottom: 0;
+  color: #566473;
+}
+
+.grade-card {
+  padding: 16px;
+  border: 1px solid #c7d2da;
+  border-radius: 8px;
+  background: #f6f8f9;
+  display: grid;
+  place-items: center;
+  gap: 4px;
+  text-align: center;
+}
+
+.grade-card strong {
+  color: #27645f;
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.grade-card span,
+.grade-card small {
+  color: #38515f;
+  font-weight: 900;
+}
+
+.report-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.report-metric {
+  min-height: 84px;
+  padding: 12px;
+  border: 1px solid #dce3e8;
+  border-radius: 8px;
+  background: #fbfcfd;
+  display: grid;
+  align-content: center;
+  gap: 4px;
+}
+
+.report-metric span {
+  color: #556372;
+  font-size: 0.86rem;
+  font-weight: 900;
+}
+
+.report-metric strong {
+  color: #18202a;
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.report-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.report-section {
+  padding: 14px;
+  border: 1px solid #dce3e8;
+  border-radius: 8px;
+  background: #ffffff;
+  display: grid;
+  gap: 10px;
+}
+
+.report-section.wide {
+  grid-column: 1 / -1;
+}
+
+.report-section h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.behavior-list {
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.behavior-list div {
+  padding: 10px 12px;
+  border: 1px solid #e2e7ec;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.behavior-list dt {
+  color: #556372;
+  font-weight: 900;
+}
+
+.behavior-list dd {
+  margin: 0;
+  color: #18202a;
+  font-weight: 900;
+}
+
+.decision-list,
+.takeaway-list,
+.topic-list {
+  margin: 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 8px;
+}
+
+.decision-list li {
+  color: #556372;
+  line-height: 1.55;
+}
+
+.decision-list strong {
+  display: block;
+  color: #18202a;
+}
+
+.decision-list span {
+  display: block;
+}
+
+.takeaway-list li,
+.topic-list li {
+  color: #445362;
+  line-height: 1.55;
+}
+
+.report-actions {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .state-actions {
@@ -762,6 +922,9 @@ p {
   .resource-panel,
   .event-options,
   .event-state-grid,
+  .report-grid,
+  .report-hero,
+  .report-metric-grid,
   .reward-options,
   .run-progress,
   .run-track,

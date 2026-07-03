@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { ActionCard } from "../components/ActionCard";
 import { EventNode } from "../components/EventNode";
+import { FinalReport } from "../components/FinalReport";
 import { ResourcePanel } from "../components/ResourcePanel";
 import { RewardChoice } from "../components/RewardChoice";
 import { RunProgress } from "../components/RunProgress";
@@ -24,6 +25,7 @@ import {
   discardHand,
   drawCards,
   endTurn,
+  generateFinalReport,
   getCardRewardOptions,
   getCurrentRunNode,
   getEventById,
@@ -103,6 +105,7 @@ export function App() {
   const [feedbackIds, setFeedbackIds] = useState<GameId[]>([]);
   const [activeRewardCardIds, setActiveRewardCardIds] = useState<GameId[]>([]);
   const [selectedRewardCardId, setSelectedRewardCardId] = useState<GameId>();
+  const [selectedRewardCardIds, setSelectedRewardCardIds] = useState<GameId[]>([]);
   const [selectedEventChoiceId, setSelectedEventChoiceId] = useState<GameId>();
   const [eventConsequence, setEventConsequence] = useState<string>();
 
@@ -136,6 +139,21 @@ export function App() {
     .map((feedbackId) => feedbackById.get(feedbackId)?.message)
     .map((message) => (message ? formatUiText(message) : message))
     .filter((message): message is string => Boolean(message));
+  const finalReport = useMemo(() => {
+    if (flowPhase !== "complete" && flowPhase !== "failed") {
+      return undefined;
+    }
+
+    return generateFinalReport({
+      cards,
+      events,
+      outcome: flowPhase === "complete" ? "completed" : "failed",
+      run,
+      scenarios,
+      selectedEventChoiceIds: eventRunMemory.selectedChoiceIds,
+      selectedRewardCardIds,
+    });
+  }, [eventRunMemory.selectedChoiceIds, flowPhase, run, selectedRewardCardIds]);
 
   function startFreshRun() {
     const resetDeck = resetRunDeck(startingDeckCardIds);
@@ -150,6 +168,7 @@ export function App() {
     setFeedbackIds([]);
     setActiveRewardCardIds([]);
     setSelectedRewardCardId(undefined);
+    setSelectedRewardCardIds([]);
     setSelectedEventChoiceId(undefined);
     setEventConsequence(undefined);
     setActivityLog([
@@ -331,6 +350,7 @@ export function App() {
     }
 
     setSelectedRewardCardId(card.id);
+    setSelectedRewardCardIds((cardIds) => [...cardIds, card.id]);
     setDemoDeckCardIds((cardIds) => addCardToRunDeck(cardIds, card.id));
     setRun((currentRun) => ({
       ...currentRun,
@@ -601,36 +621,8 @@ export function App() {
           </>
         ) : null}
 
-        {flowPhase === "complete" ? (
-          <section className="state-panel success" aria-label="런 완료">
-            <p className="eyebrow">런 완료</p>
-            <h2>모든 업무 상황을 마쳤습니다</h2>
-            <p>
-              이번 MVP에서는 최종 리포트 대신 완료 상태만 표시합니다. 선택과
-              피드백을 정리하는 화면은 다음 티켓에서 추가할 수 있습니다.
-            </p>
-            <div className="state-actions">
-              <button className="primary-button" onClick={startFreshRun} type="button">
-                런 다시 시작
-              </button>
-            </div>
-          </section>
-        ) : null}
-
-        {flowPhase === "failed" ? (
-          <section className="state-panel failure" aria-label="런 중단">
-            <p className="eyebrow">런 중단</p>
-            <h2>상황을 안전하게 정리하지 못했습니다</h2>
-            <p>
-              리스크가 커져 이번 런을 멈췄습니다. 덱을 초기화하고 첫 이벤트부터
-              다시 연습할 수 있습니다.
-            </p>
-            <div className="state-actions">
-              <button className="primary-button" onClick={startFreshRun} type="button">
-                런 다시 시작
-              </button>
-            </div>
-          </section>
+        {finalReport ? (
+          <FinalReport onReplay={startFreshRun} report={finalReport} />
         ) : null}
       </section>
     </main>
