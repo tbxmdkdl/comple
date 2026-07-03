@@ -1,11 +1,13 @@
 import { useMemo, useState } from "react";
 import { ActionCard } from "../components/ActionCard";
+import { EventNode } from "../components/EventNode";
 import { ResourcePanel } from "../components/ResourcePanel";
 import { RewardChoice } from "../components/RewardChoice";
 import { RunProgress } from "../components/RunProgress";
 import { ScenarioStatus } from "../components/ScenarioStatus";
 import {
   cards,
+  events,
   learningFeedback,
   scenarios,
   startingDeckCardIds,
@@ -13,8 +15,10 @@ import {
 import {
   addCardToRunDeck,
   addRewardCardToDeck,
+  applyEventChoice,
   canPlayCard,
   createFixedRunNodes,
+  createInitialEventRunMemory,
   createInitialPlayerState,
   createStartingDeck,
   discardHand,
@@ -22,10 +26,13 @@ import {
   endTurn,
   getCardRewardOptions,
   getCurrentRunNode,
-  getNextScenarioIndex,
+  getEventById,
+  getNextRunNodeIndex,
   getPhaseAfterScenarioOutcome,
+  getPhaseForRunNode,
   getRunProgress,
   playCard,
+  resetEventRunMemory,
   resetRunDeck,
   startScenario,
   startTurn,
@@ -33,6 +40,10 @@ import {
 import type {
   Card,
   CardCost,
+  Event as RunEvent,
+  EventChoice,
+  EventRunMemory,
+  FixedRunNode,
   FixedRunPhase,
   GameId,
   MetricKey,
@@ -49,12 +60,19 @@ type ActivityLogEntry = {
   tone?: "info" | "success" | "failure";
 };
 
-const runScenarioIds: GameId[] = [
-  scenarios[0].id,
-  scenarios[1].id,
-  scenarios[5].id,
-];
-const fixedRunNodes = createFixedRunNodes(runScenarioIds);
+const fixedRunNodes = createFixedRunNodes([
+  { type: "event", eventId: events[0].id, title: "이벤트 1" },
+  { type: "scenario", scenarioId: scenarios[0].id, title: "1번째 상황" },
+  { type: "event", eventId: events[1].id, title: "이벤트 2" },
+  { type: "scenario", scenarioId: scenarios[1].id, title: "2번째 상황" },
+  { type: "event", eventId: events[2].id, title: "이벤트 3" },
+  {
+    type: "scenario",
+    scenarioId: scenarios[5].id,
+    title: "최종 상황",
+    isFinal: true,
+  },
+]);
 const handSize = 5;
 
 const metricLabels: Record<MetricKey, string> = {
@@ -67,20 +85,26 @@ const metricLabels: Record<MetricKey, string> = {
 };
 
 export function App() {
+  const initialEventMemory = createInitialEventRunMemory();
   const [flowPhase, setFlowPhase] = useState<FixedRunPhase>("intro");
   const [currentNodeIndex, setCurrentNodeIndex] = useState(0);
+  const [eventRunMemory, setEventRunMemory] = useState<EventRunMemory>(
+    () => initialEventMemory,
+  );
   const [demoDeckCardIds, setDemoDeckCardIds] = useState<GameId[]>(() =>
     resetRunDeck(startingDeckCardIds),
   );
   const [run, setRun] = useState(() =>
-    createPlayableRun(getScenarioForNodeIndex(0), startingDeckCardIds, 0),
+    createRunForNode(0, startingDeckCardIds, undefined, initialEventMemory),
   );
   const [activityLog, setActivityLog] = useState<ActivityLogEntry[]>(() => [
-    createLogEntry("런을 시작하면 첫 업무 상황이 열립니다."),
+    createLogEntry("런을 시작하면 첫 업무 이벤트가 열립니다."),
   ]);
   const [feedbackIds, setFeedbackIds] = useState<GameId[]>([]);
   const [activeRewardCardIds, setActiveRewardCardIds] = useState<GameId[]>([]);
   const [selectedRewardCardId, setSelectedRewardCardId] = useState<GameId>();
+  const [selectedEventChoiceId, setSelectedEventChoiceId] = useState<GameId>();
+  const [eventConsequence, setEventConsequence] = useState<string>();
 
   const cardsById = useMemo(() => new Map(cards.map((card) => [card.id, card])), []);
   const activeRewardOptions = useMemo(
@@ -97,6 +121,7 @@ export function App() {
   const currentRunNode =
     getCurrentRunNode(fixedRunNodes, currentNodeIndex) ?? fixedRunNodes[0];
   const currentScenario = getScenarioForNodeIndex(currentNodeIndex);
+  const currentEvent = getEventForNodeIndex(currentNodeIndex);
   const runProgress = getRunProgress(fixedRunNodes, currentNodeIndex);
   const handCards = run.cardZones.hand
     .map((cardId) => cardsById.get(cardId))
@@ -104,6 +129,7 @@ export function App() {
   const activeScenario = run.activeScenario;
   const outcome = activeScenario?.outcome ?? "unresolved";
   const isResolved = outcome !== "unresolved" || flowPhase !== "scenario";
+  const showEventNode = flowPhase === "event";
   const showScenarioWorkspace = flowPhase === "scenario" || flowPhase === "reward";
   const showRewardChoice = flowPhase === "reward";
   const latestFeedback = feedbackIds
@@ -113,17 +139,75 @@ export function App() {
 
   function startFreshRun() {
     const resetDeck = resetRunDeck(startingDeckCardIds);
-    const firstScenario = getScenarioForNodeIndex(0);
+    const resetMemory = resetEventRunMemory();
+    const firstNode = fixedRunNodes[0];
 
     setDemoDeckCardIds(resetDeck);
+    setEventRunMemory(resetMemory);
     setCurrentNodeIndex(0);
-    setRun(createPlayableRun(firstScenario, resetDeck, 0));
-    setFlowPhase("scenario");
+    setRun(createRunForNode(0, resetDeck, undefined, resetMemory));
+    setFlowPhase(getPhaseForRunNode(firstNode));
     setFeedbackIds([]);
     setActiveRewardCardIds([]);
     setSelectedRewardCardId(undefined);
+    setSelectedEventChoiceId(undefined);
+    setEventConsequence(undefined);
     setActivityLog([
-      createLogEntry("런이 시작되었습니다. 첫 상황에서 조치를 선택하세요."),
+      createLogEntry("런이 시작되었습니다. 첫 이벤트에서 선택하세요."),
+    ]);
+  }
+
+  function handleSelectEventChoice(choice: EventChoice) {
+    if (selectedEventChoiceId) {
+      return;
+    }
+
+    const result = applyEventChoice({
+      choice,
+      deckCardIds: demoDeckCardIds,
+      event: currentEvent,
+      memory: eventRunMemory,
+      run,
+    });
+
+    setRun(result.state);
+    setDemoDeckCardIds(result.deckCardIds);
+    setEventRunMemory(result.memory);
+    setSelectedEventChoiceId(choice.id);
+    setEventConsequence(choice.consequence);
+    setActivityLog((entries) =>
+      [
+        createLogEntry(
+          `${choice.label} 선택: ${formatResourceChanges(result.resourceChanges)}`,
+          "success",
+        ),
+        ...entries,
+      ].slice(0, 8),
+    );
+  }
+
+  function handleContinueAfterEvent() {
+    if (!selectedEventChoiceId) {
+      return;
+    }
+
+    const nextNodeIndex = getNextRunNodeIndex(fixedRunNodes, currentNodeIndex);
+    const nextNode = getCurrentRunNode(fixedRunNodes, nextNodeIndex);
+    const nextRun = createRunForNode(
+      nextNodeIndex,
+      demoDeckCardIds,
+      run,
+      eventRunMemory,
+    );
+
+    setCurrentNodeIndex(nextNodeIndex);
+    setRun(nextRun);
+    setFlowPhase(getPhaseForRunNode(nextNode));
+    setSelectedEventChoiceId(undefined);
+    setEventConsequence(undefined);
+    setFeedbackIds([]);
+    setActivityLog([
+      createLogEntry(getNodeStartMessage(nextNode)),
     ]);
   }
 
@@ -266,18 +350,25 @@ export function App() {
       return;
     }
 
-    const nextNodeIndex = getNextScenarioIndex(fixedRunNodes, currentNodeIndex);
-    const nextScenario = getScenarioForNodeIndex(nextNodeIndex);
-    const nextRun = createPlayableRun(nextScenario, demoDeckCardIds, nextNodeIndex, run);
+    const nextNodeIndex = getNextRunNodeIndex(fixedRunNodes, currentNodeIndex);
+    const nextNode = getCurrentRunNode(fixedRunNodes, nextNodeIndex);
+    const nextRun = createRunForNode(
+      nextNodeIndex,
+      demoDeckCardIds,
+      run,
+      eventRunMemory,
+    );
 
     setCurrentNodeIndex(nextNodeIndex);
     setRun(nextRun);
-    setFlowPhase("scenario");
+    setFlowPhase(getPhaseForRunNode(nextNode));
     setActiveRewardCardIds([]);
     setSelectedRewardCardId(undefined);
+    setSelectedEventChoiceId(undefined);
+    setEventConsequence(undefined);
     setFeedbackIds([]);
     setActivityLog([
-      createLogEntry("보상 카드가 유지된 덱으로 다음 상황을 시작합니다."),
+      createLogEntry(getNodeStartMessage(nextNode)),
     ]);
   }
 
@@ -330,10 +421,10 @@ export function App() {
         {flowPhase === "intro" ? (
           <section className="state-panel" aria-label="런 시작">
             <p className="eyebrow">런 시작</p>
-            <h2>세 가지 업무 상황을 순서대로 해결하세요</h2>
+            <h2>이벤트와 업무 상황을 순서대로 해결하세요</h2>
             <p>
-              각 상황을 안전하게 정리하면 새 조치 카드를 선택할 수 있습니다.
-              선택한 카드는 다음 상황의 덱에 유지됩니다.
+              짧은 이벤트 선택은 다음 상황의 리스크, 증빙, 신뢰, 압박 또는 덱
+              흐름에 영향을 줍니다.
             </p>
             <div className="state-actions">
               <button className="primary-button" onClick={startFreshRun} type="button">
@@ -341,6 +432,53 @@ export function App() {
               </button>
             </div>
           </section>
+        ) : null}
+
+        {showEventNode ? (
+          <>
+            <EventNode
+              consequence={eventConsequence}
+              deckSize={demoDeckCardIds.length}
+              event={currentEvent}
+              onContinue={handleContinueAfterEvent}
+              onSelect={handleSelectEventChoice}
+              selectedChoiceId={selectedEventChoiceId}
+            />
+
+            <ResourcePanel
+              maxAttention={run.player.maxAttention}
+              maxTime={run.player.maxTime}
+              resources={run.player.resources}
+              turnResource={run.player.turnResource}
+            />
+
+            <section className="event-state-grid" aria-label="이벤트 적용 상태">
+              <section className="zone-counts event-state-card" aria-label="덱 상태">
+                <h2>덱 상태</h2>
+                <dl>
+                  <div>
+                    <dt>런 덱</dt>
+                    <dd>{demoDeckCardIds.length}</dd>
+                  </div>
+                  <div>
+                    <dt>현재 뽑을 카드</dt>
+                    <dd>{run.cardZones.drawPile.length}</dd>
+                  </div>
+                </dl>
+              </section>
+
+              <section className="activity-log event-state-card" aria-label="최근 진행 기록">
+                <h2>진행 기록</h2>
+                <ol>
+                  {activityLog.map((entry) => (
+                    <li className={entry.tone} key={entry.id}>
+                      {entry.message}
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            </section>
+          </>
         ) : null}
 
         {showScenarioWorkspace ? (
@@ -484,7 +622,7 @@ export function App() {
             <p className="eyebrow">런 중단</p>
             <h2>상황을 안전하게 정리하지 못했습니다</h2>
             <p>
-              리스크가 커져 이번 런을 멈췄습니다. 덱을 초기화하고 첫 상황부터
+              리스크가 커져 이번 런을 멈췄습니다. 덱을 초기화하고 첫 이벤트부터
               다시 연습할 수 있습니다.
             </p>
             <div className="state-actions">
@@ -500,21 +638,76 @@ export function App() {
 }
 
 function getScenarioForNodeIndex(nodeIndex: number): Scenario {
-  const node = getCurrentRunNode(fixedRunNodes, nodeIndex) ?? fixedRunNodes[0];
+  const node = getCurrentRunNode(fixedRunNodes, nodeIndex);
+
+  if (node?.type !== "scenario") {
+    return scenarios[0];
+  }
 
   return scenarios.find((scenario) => scenario.id === node.scenarioId) ?? scenarios[0];
+}
+
+function getEventForNodeIndex(nodeIndex: number): RunEvent {
+  const node = getCurrentRunNode(fixedRunNodes, nodeIndex);
+
+  if (node?.type !== "event") {
+    return events[0];
+  }
+
+  return getEventById(events, node.eventId) ?? events[0];
 }
 
 function createRewardCardIds(deckCardIds: readonly GameId[]): GameId[] {
   return getCardRewardOptions(cards, deckCardIds).map((card) => card.id);
 }
 
+function createRunForNode(
+  nodeIndex: number,
+  deckCardIds: readonly GameId[],
+  previousRun: RunState | undefined,
+  eventMemory: EventRunMemory,
+): RunState {
+  const node = getCurrentRunNode(fixedRunNodes, nodeIndex);
+
+  if (node?.type === "scenario") {
+    return createPlayableRun(
+      getScenarioForNodeIndex(nodeIndex),
+      deckCardIds,
+      nodeIndex,
+      previousRun,
+      eventMemory,
+    );
+  }
+
+  return createEventRun(nodeIndex, deckCardIds, previousRun, eventMemory);
+}
+
+function createEventRun(
+  nodeIndex: number,
+  deckCardIds: readonly GameId[],
+  previousRun: RunState | undefined,
+  eventMemory: EventRunMemory,
+): RunState {
+  return {
+    id: "fixed-run",
+    phase: "event",
+    nodeIndex,
+    player: createPlayerStateFromEventMemory(eventMemory),
+    cardZones: createStartingDeck(deckCardIds),
+    availableRewardIds: [],
+    completedScenarioIds: [...(previousRun?.completedScenarioIds ?? [])],
+    decisionLog: [...(previousRun?.decisionLog ?? [])],
+  };
+}
+
 function createPlayableRun(
   scenario: Scenario,
   deckCardIds: readonly GameId[],
   nodeIndex: number,
-  previousRun?: RunState,
+  previousRun: RunState | undefined,
+  eventMemory: EventRunMemory,
 ): RunState {
+  const adjustedScenario = createScenarioWithEventResources(scenario, eventMemory);
   const baseRun: RunState = {
     id: "fixed-run",
     phase: "notStarted",
@@ -525,7 +718,7 @@ function createPlayableRun(
     completedScenarioIds: [...(previousRun?.completedScenarioIds ?? [])],
     decisionLog: [...(previousRun?.decisionLog ?? [])],
   };
-  const scenarioRun = startScenario(baseRun, scenario);
+  const scenarioRun = startScenario(baseRun, adjustedScenario);
   const drawResult = drawCards(scenarioRun.cardZones, handSize);
 
   return {
@@ -534,11 +727,61 @@ function createPlayableRun(
   };
 }
 
+function createScenarioWithEventResources(
+  scenario: Scenario,
+  eventMemory: EventRunMemory,
+): Scenario {
+  return {
+    ...scenario,
+    startingResources: applyResourceDeltas(
+      scenario.startingResources ?? {},
+      eventMemory.resourceChanges,
+    ),
+  };
+}
+
+function createPlayerStateFromEventMemory(eventMemory: EventRunMemory) {
+  const player = createInitialPlayerState();
+
+  return {
+    ...player,
+    resources: applyResourceDeltas(player.resources, eventMemory.resourceChanges),
+  };
+}
+
+function applyResourceDeltas<T extends Partial<PlayerResources>>(
+  resources: T,
+  changes: Partial<Record<MetricKey, number>>,
+): T {
+  return Object.entries(changes).reduce<T>(
+    (nextResources, [resource, amount]) => ({
+      ...nextResources,
+      [resource]: clampMinimum(
+        ((nextResources as Partial<Record<MetricKey, number>>)[resource as MetricKey] ?? 0) +
+          (amount ?? 0),
+      ),
+    }),
+    { ...resources },
+  );
+}
+
 function markScenarioComplete(run: RunState, scenarioId: GameId): RunState {
   return {
     ...run,
     completedScenarioIds: [...new Set([...run.completedScenarioIds, scenarioId])],
   };
+}
+
+function getNodeStartMessage(node: FixedRunNode | undefined): string {
+  if (!node) {
+    return "런이 마무리되었습니다.";
+  }
+
+  if (node.type === "event") {
+    return `${node.title}가 열렸습니다. 짧은 선택을 진행하세요.`;
+  }
+
+  return `${node.title}이 시작되었습니다. 조치를 선택하세요.`;
 }
 
 function getDisabledReason(run: RunState, card: Card): string | undefined {
@@ -670,4 +913,8 @@ function formatUiText(text: string): string {
     .replaceAll("증거는", "증빙은")
     .replaceAll("증거를", "증빙을")
     .replaceAll("증거", "증빙");
+}
+
+function clampMinimum(value: number): number {
+  return Math.max(0, value);
 }

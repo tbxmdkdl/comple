@@ -203,6 +203,33 @@ export interface Scenario {
   isFinal?: boolean;
 }
 
+export interface EventResourceEffect {
+  type: "adjustResource";
+  changes: ResourceChange[];
+}
+
+export interface EventAddCardEffect {
+  type: "addCardToDeck";
+  cardId: GameId;
+}
+
+export type EventEffect = EventResourceEffect | EventAddCardEffect;
+
+export interface EventChoice {
+  id: GameId;
+  label: string;
+  consequence: string;
+  effects: EventEffect[];
+}
+
+export interface Event {
+  id: GameId;
+  title: string;
+  description: string;
+  choices: EventChoice[];
+  complianceTopics: ComplianceTopic[];
+}
+
 export interface PlayerResources {
   risk: number;
   evidence: number;

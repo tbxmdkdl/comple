@@ -5,6 +5,7 @@ import {
   createFixedRunNodes,
   getCurrentRunNode,
   getNextScenarioIndex,
+  getNextRunNodeIndex,
   getPhaseAfterScenarioOutcome,
   getRunProgress,
   resetRunDeck,
@@ -20,7 +21,9 @@ describe("fixed run progression helpers", () => {
   it("creates the fixed sequence in order with a final scenario", () => {
     const nodes = createFixedRunNodes(scenarioIds);
 
-    expect(nodes.map((node) => node.scenarioId)).toEqual(scenarioIds);
+    expect(
+      nodes.map((node) => (node.type === "scenario" ? node.scenarioId : undefined)),
+    ).toEqual(scenarioIds);
     expect(nodes).toHaveLength(3);
     expect(nodes[0].isFinal).toBe(false);
     expect(nodes[1].isFinal).toBe(false);
@@ -39,6 +42,29 @@ describe("fixed run progression helpers", () => {
 
     expect(getNextScenarioIndex(nodes, 0)).toBe(1);
     expect(getNextScenarioIndex(nodes, 1)).toBe(2);
+  });
+
+  it("supports fixed event nodes between scenarios", () => {
+    const nodes = createFixedRunNodes([
+      { type: "event", eventId: "lunch-briefing", title: "이벤트 1" },
+      { type: "scenario", scenarioId: scenarioIds[0], title: "1번째 상황" },
+      { type: "event", eventId: "organize-notes", title: "이벤트 2" },
+      { type: "scenario", scenarioId: scenarioIds[1], title: "2번째 상황" },
+      { type: "event", eventId: "deadline-choice", title: "이벤트 3" },
+      {
+        type: "scenario",
+        scenarioId: scenarioIds[2],
+        title: "최종 상황",
+        isFinal: true,
+      },
+    ]);
+
+    expect(nodes).toHaveLength(6);
+    expect(nodes.filter((node) => node.type === "event")).toHaveLength(3);
+    expect(nodes[0]).toMatchObject({ type: "event", eventId: "lunch-briefing" });
+    expect(nodes[5].isFinal).toBe(true);
+    expect(getNextRunNodeIndex(nodes, 1)).toBe(2);
+    expect(getRunProgress(nodes, 0).label).toBe("1 / 6 단계");
   });
 
   it("preserves deck additions across nodes without mutating input", () => {
@@ -70,7 +96,10 @@ describe("fixed run progression helpers", () => {
 
     expect(resetDeck).toEqual(startingDeckCardIds);
     expect(resetDeck).not.toBe(startingDeckCardIds);
-    expect(firstNode?.scenarioId).toBe("vendor-gift-pressure");
+    expect(firstNode?.type).toBe("scenario");
+    expect(firstNode?.type === "scenario" ? firstNode.scenarioId : undefined).toBe(
+      "vendor-gift-pressure",
+    );
     expect(progress.label).toBe("1 / 3 상황");
   });
 });

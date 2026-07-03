@@ -7,6 +7,7 @@ type RunProgressProps = {
 
 const phaseLabels: Record<FixedRunPhase, string> = {
   intro: "런 시작 전",
+  event: "이벤트 선택",
   scenario: "상황 진행 중",
   reward: "다음 조치 카드 선택",
   complete: "런 완료",
@@ -20,12 +21,10 @@ export function RunProgress({ phase, progress }: RunProgressProps) {
         <p className="eyebrow">현재 단계</p>
         <strong>{progress.isFinal ? "최종 상황" : progress.label}</strong>
       </div>
-      <ol className="run-track" aria-label="상황 진행 순서">
-        {Array.from({ length: progress.totalSteps }, (_, index) => {
-          const stepNumber = index + 1;
+      <ol className="run-track" aria-label="런 진행 순서">
+        {progress.steps.map((step, index) => {
           const isCurrent = index === progress.currentIndex;
           const isComplete = index < progress.currentIndex;
-          const isFinal = stepNumber === progress.totalSteps;
 
           return (
             <li
@@ -34,10 +33,10 @@ export function RunProgress({ phase, progress }: RunProgressProps) {
                 isCurrent ? "current" : "",
                 isComplete ? "complete" : "",
               ].join(" ")}
-              key={stepNumber}
+              key={step.id}
             >
-              <span>{stepNumber}</span>
-              <strong>{isFinal ? "최종 상황" : `${stepNumber}번째 상황`}</strong>
+              <span>{index + 1}</span>
+              <strong>{step.title}</strong>
             </li>
           );
         })}

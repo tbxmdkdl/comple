@@ -17,6 +17,11 @@ export type {
   DecisionLogEntry,
   DecisionType,
   EffectCondition,
+  Event,
+  EventAddCardEffect,
+  EventChoice,
+  EventEffect,
+  EventResourceEffect,
   GameId,
   LearningFeedback,
   LearningFeedbackTrigger,
@@ -93,6 +98,8 @@ export {
   createFixedRunNodes,
   getCurrentRunNode,
   getNextScenarioIndex,
+  getNextRunNodeIndex,
+  getPhaseForRunNode,
   getPhaseAfterScenarioOutcome,
   getRunProgress,
   resetRunDeck,
@@ -100,6 +107,21 @@ export {
 
 export type {
   FixedRunNode,
+  FixedRunNodeInput,
   FixedRunPhase,
   FixedRunProgress,
+  FixedRunProgressStep,
 } from "./run";
+
+export {
+  applyEventChoice,
+  createInitialEventRunMemory,
+  getEventById,
+  mergeResourceChangeTotals,
+  resetEventRunMemory,
+} from "./events";
+
+export type {
+  ApplyEventChoiceResult,
+  EventRunMemory,
+} from "./events";

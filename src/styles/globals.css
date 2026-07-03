@@ -88,6 +88,7 @@ p {
 
 .scenario-panel,
 .scenario-status,
+.event-panel,
 .hand-panel,
 .reward-panel,
 .run-progress,
@@ -332,6 +333,7 @@ p {
 }
 
 .hand-panel,
+.event-panel,
 .reward-panel,
 .side-panel {
   padding: 18px;
@@ -409,6 +411,7 @@ p {
 }
 
 .action-card:focus-visible,
+.event-choice:focus-visible,
 .reward-card:focus-visible,
 .primary-button:focus-visible,
 .secondary-button:focus-visible {
@@ -481,6 +484,96 @@ p {
 .side-panel {
   display: grid;
   gap: 14px;
+}
+
+.event-panel {
+  display: grid;
+  gap: 16px;
+}
+
+.event-heading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.event-heading p {
+  margin-bottom: 0;
+  color: #566473;
+}
+
+.event-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.event-choice {
+  min-height: 190px;
+  padding: 14px;
+  border: 1px solid #c9d4dd;
+  border-radius: 8px;
+  background: #ffffff;
+  color: inherit;
+  text-align: left;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.event-choice:not(:disabled):hover {
+  border-color: #467a75;
+  box-shadow: 0 14px 28px rgb(24 32 42 / 12%);
+  transform: translateY(-2px);
+}
+
+.event-choice.selected {
+  border-color: #2f8f66;
+  background: #edf7f2;
+}
+
+.event-choice strong {
+  font-size: 1.08rem;
+}
+
+.event-choice span {
+  color: #445362;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.event-effect-summary {
+  color: #27645f;
+  font-weight: 900;
+}
+
+.event-footer {
+  padding-top: 14px;
+  border-top: 1px solid #e2e7ec;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.event-state-grid {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.event-state-card {
+  padding: 18px;
+  border: 1px solid #d3dce3;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 14px 32px rgb(24 32 42 / 7%);
 }
 
 .reward-panel {
@@ -667,6 +760,8 @@ p {
 
 @media (max-width: 960px) {
   .resource-panel,
+  .event-options,
+  .event-state-grid,
   .reward-options,
   .run-progress,
   .run-track,
@@ -686,6 +781,8 @@ p {
   }
 
   .top-bar,
+  .event-footer,
+  .event-heading,
   .reward-footer,
   .reward-heading,
   .section-heading,
