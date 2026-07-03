@@ -66,6 +66,14 @@ After the stack is chosen and project setup is complete, update this file with e
 - test
 - lint or typecheck, if available
 
+## Project Commands
+
+- Install: `npm install`
+- Development server: `npm run dev`
+- Build: `npm run build`
+- Test: `npm test`
+- Typecheck: `npm run typecheck`
+
 ## Design Pillars
 
 Every major feature should support at least one of:
