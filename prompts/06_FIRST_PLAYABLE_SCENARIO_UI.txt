@@ -1,0 +1,43 @@
+Goal:
+Build the first minimal playable scenario UI.
+
+Context:
+Read AGENTS.md and docs/PROJECT_BRIEF.md. Use existing game/domain logic and data. This ticket connects the engine to the UI for one playable scenario.
+
+Requirements:
+The UI should show:
+- current scenario title and setup
+- pressure/risk signals
+- player metrics: risk, evidence, trust, pressure, attention/time
+- current hand
+- card cost and effect summary
+- feedback log
+- end turn or resolve action button if required by the current model
+- scenario success/failure state
+
+Constraints:
+- Keep UI simple.
+- Do not add complex animations.
+- Do not implement reward flow yet.
+- Do not implement full run progression yet.
+- Do not hardcode card/scenario data in components.
+- Use existing engine functions.
+
+Done when:
+- User can start and complete/fail one scenario manually.
+- Build passes.
+- The first playable loop exists at scenario level.
+
+Manual test steps:
+1. Start the app.
+2. Enter the playable scenario.
+3. Play several cards.
+4. Confirm metrics change.
+5. Resolve the scenario.
+6. Confirm feedback appears.
+
+Before coding:
+Inspect current app structure and propose a short plan.
+
+After coding:
+Summarize changed files, commands/tests run, and risks.

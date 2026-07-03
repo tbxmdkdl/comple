@@ -1,0 +1,35 @@
+Goal:
+Implement a short fixed run progression.
+
+Context:
+Read AGENTS.md and docs/PROJECT_BRIEF.md. Use existing scenario and reward flow. Keep this simple for MVP.
+
+Requirements:
+- Create a fixed short run sequence.
+- Include at least:
+  - start/title
+  - scenario
+  - reward
+  - scenario
+  - reward or event placeholder
+  - final scenario placeholder or end
+- Track current node/index in run state.
+- Preserve deck changes across nodes.
+
+Constraints:
+- No complex branching map.
+- No procedural generation.
+- No advanced UI.
+- Do not rewrite the scenario engine.
+- Keep current architecture.
+
+Done when:
+- Player can progress through multiple nodes in one session.
+- Deck/reward changes persist across nodes.
+- Build passes.
+
+Before coding:
+Inspect current flow and propose a short plan.
+
+After coding:
+Summarize changed files, commands/tests run, and risks.

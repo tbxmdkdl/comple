@@ -1,0 +1,39 @@
+Goal:
+Create a technical implementation plan before writing any code.
+
+Context:
+This is a fresh project folder for a 2-week MVP compliance card game. Read AGENTS.md and docs/PROJECT_BRIEF.md. The technical stack has not been chosen yet.
+
+Task:
+Evaluate implementation approaches and recommend a stack for this specific MVP. Do not write code yet.
+
+Requirements:
+1. Define the technical requirements for this game.
+2. Compare at least 4 different implementation approaches.
+3. Do not choose a stack just because it was mentioned as an example.
+4. Score each approach against:
+   - 2-week MVP feasibility
+   - card UI implementation ease
+   - game state management simplicity
+   - Codex readability and maintainability
+   - testability
+   - static deployment ease
+   - content-data separation
+   - future expansion potential
+5. Recommend one primary stack and one fallback option.
+6. Define the initial folder structure for the recommended stack.
+7. Define the first 10 implementation tickets.
+8. List explicit non-goals for the MVP.
+9. Explain how game logic, content data, and UI will stay separated.
+
+Constraints:
+- Do not create files.
+- Do not install packages.
+- Do not implement gameplay.
+- Do not overbuild architecture.
+- Do not add backend, auth, multiplayer, analytics, or complex animation systems.
+
+Done when:
+- You provide a concise but specific implementation plan.
+- The recommendation is justified by the evaluation criteria.
+- The next implementation prompt is clear.

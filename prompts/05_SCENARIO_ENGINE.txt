@@ -1,0 +1,44 @@
+Goal:
+Implement pure scenario/action resolution logic.
+
+Context:
+Read AGENTS.md and docs/PROJECT_BRIEF.md. Use existing card data and deck logic. Implement logic only before UI.
+
+Requirements:
+Implement functions or equivalent logic for:
+- starting a scenario
+- starting a player turn/action phase
+- checking whether a card can be played
+- applying card cost
+- resolving card effects
+- updating risk, evidence, trust, pressure, and attention/time
+- ending a turn or action step
+- checking scenario success/failure
+- logging key decisions for the final report
+
+Testing:
+Add tests for:
+- valid card play
+- insufficient attention/time
+- risk reduction
+- evidence gain
+- trust/pressure changes
+- success/failure condition
+- decision log updates
+
+Constraints:
+- Keep logic pure where practical.
+- Do not tie logic to UI components.
+- Do not implement rewards/run progression yet.
+- Do not turn scenarios into quiz answers.
+
+Done when:
+- A scenario can be simulated through game functions.
+- Tests cover core resolution behavior.
+- Build passes.
+
+Before coding:
+Inspect current game logic and propose a short plan.
+
+After coding:
+Summarize changed files, tests run, and risks.

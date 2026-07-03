@@ -1,0 +1,41 @@
+Goal:
+Implement pure deck/hand/discard logic for the card game.
+
+Context:
+Read AGENTS.md and docs/PROJECT_BRIEF.md. Use existing types and content data. Implement logic only; do not build the main gameplay UI yet.
+
+Requirements:
+Implement pure functions for:
+- creating a starting deck
+- shuffling
+- drawing cards
+- discarding one card
+- discarding hand
+- reshuffling discard pile into draw pile
+- handling empty draw pile
+- optional exhaust/remove-from-run behavior if the current model supports it
+
+Testing:
+Add tests for:
+- drawing cards
+- discarding cards
+- reshuffling discard into draw pile
+- preserving card identity
+- handling insufficient deck size
+
+Constraints:
+- Keep functions deterministic where useful, or inject randomness where needed for testing.
+- Do not use UI state in game logic.
+- Do not implement scenario resolution yet.
+- Do not add unnecessary dependencies.
+
+Done when:
+- Deck engine exists in the game/domain folder.
+- Tests pass for deck operations.
+- Build passes.
+
+Before coding:
+Inspect the current model and propose a short plan.
+
+After coding:
+Summarize changed files, tests run, and risks.

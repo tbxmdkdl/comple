@@ -1,0 +1,30 @@
+Goal:
+Add short decision events to the run.
+
+Context:
+Read AGENTS.md and docs/PROJECT_BRIEF.md. Use existing run progression. Events should be short choices, not training pages.
+
+Requirements:
+- Add event data with at least 3 events.
+- Each event has 2–3 choices.
+- Choices modify run/player state, such as risk, evidence, trust, pressure, deck, or future reward.
+- Add minimal event UI.
+- Integrate at least one event into the run sequence.
+
+Constraints:
+- Keep copy short.
+- Do not add long quiz explanations.
+- Do not build a complex event engine beyond MVP needs.
+- Do not break scenario progression.
+
+Done when:
+- Event appears in the run.
+- Player choice updates state.
+- Build passes.
+- Manual test confirms event outcome affects the run.
+
+Before coding:
+Inspect run state and event/data structure and propose a short plan.
+
+After coding:
+Summarize changed files, tests run, and risks.

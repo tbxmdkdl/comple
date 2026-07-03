@@ -1,0 +1,39 @@
+Goal:
+Create the initial content data for cards, scenarios, rewards, and learning feedback.
+
+Context:
+Read AGENTS.md and docs/PROJECT_BRIEF.md. Use the existing data model. This is content/data only, not UI implementation.
+
+Requirements:
+Create data-driven content:
+- 20–24 cards
+- 5–6 workplace compliance scenarios
+- 4–6 rewards/passives
+- learning feedback snippets connected to actions or outcomes
+
+Card requirements:
+- Each card should have a cost, effect, educational intention, and a gameplay tradeoff.
+- Avoid simple always-correct cards.
+- Cards should support risk-reward tension and synergy.
+
+Scenario requirements:
+- Scenarios should involve realistic workplace pressure and incomplete information.
+- Avoid obvious quiz-style right/wrong scenarios.
+- Avoid legal advice phrasing.
+
+Constraints:
+- Do not hardcode data in UI components.
+- Do not implement the playable UI yet.
+- Keep copy short.
+- Keep content generic and suitable for later SME/legal review.
+
+Done when:
+- Data files compile against the existing types.
+- Content is separated from logic and presentation.
+- Build passes.
+
+Before coding:
+Inspect the data model and propose a short content structure plan.
+
+After coding:
+Summarize files changed, commands run, and any content risks.

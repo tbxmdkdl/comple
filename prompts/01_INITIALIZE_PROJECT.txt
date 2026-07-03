@@ -1,0 +1,43 @@
+Goal:
+Initialize the fresh MVP project according to the approved technical plan.
+
+Context:
+Read AGENTS.md and docs/PROJECT_BRIEF.md first. Use them as guardrails only. Implement only the initial project setup.
+
+Requirements:
+1. Initialize the chosen project stack.
+2. Create the minimal app shell.
+3. Create folders for:
+   - game/domain logic
+   - content data
+   - UI/components
+   - tests
+   - docs if needed
+4. Add or update README with:
+   - install command
+   - dev command
+   - build command
+   - test command if available
+5. Update AGENTS.md with the actual project commands.
+6. Keep the UI as a placeholder only.
+
+Constraints:
+- Do not implement gameplay yet.
+- Do not add unnecessary dependencies.
+- Do not create a backend.
+- Do not add authentication.
+- Do not add analytics.
+- Keep the setup minimal and understandable.
+
+Done when:
+- The app can run locally.
+- The build command passes.
+- The source folder structure exists.
+- README and AGENTS.md contain accurate commands.
+- No gameplay systems are implemented yet.
+
+Before coding:
+Inspect the current files and propose a short setup plan.
+
+After coding:
+Summarize created files, commands run, and remaining setup risks.

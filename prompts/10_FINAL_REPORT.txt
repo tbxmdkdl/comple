@@ -1,0 +1,35 @@
+Goal:
+Create the final learning report.
+
+Context:
+Read AGENTS.md and docs/PROJECT_BRIEF.md. Use existing decision logs, metrics, and run outcome.
+
+Requirements:
+Final report should show:
+- final outcome or grade
+- risk management summary
+- strongest behavior
+- weakest behavior
+- key decisions
+- recommended learning topics
+- practical takeaways
+- replay button
+
+Constraints:
+- Keep feedback concise and non-legal-advice-like.
+- Do not add backend persistence.
+- Do not add analytics.
+- Do not make failure feel useless.
+- Use existing logs/metrics where possible.
+
+Done when:
+- Completing or failing the run leads to the report.
+- Report uses actual run data where possible.
+- Replay button starts a new run.
+- Build passes.
+
+Before coding:
+Inspect current run state and logs, then propose a short plan.
+
+After coding:
+Summarize changed files, commands/tests run, and risks.

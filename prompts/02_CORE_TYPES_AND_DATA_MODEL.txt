@@ -1,0 +1,38 @@
+Goal:
+Implement the core types and data model for the MVP.
+
+Context:
+Read AGENTS.md and docs/PROJECT_BRIEF.md. Use the current stack and architecture. Implement only core model/types; do not build UI gameplay yet.
+
+Requirements:
+Define types/interfaces/enums or equivalent structures for:
+- Card
+- CardEffect
+- CardTag/category
+- Scenario
+- ScenarioIntent or pressure signal
+- PlayerState
+- RunState
+- Reward
+- Passive/Upgrade
+- LearningFeedback
+- DecisionLog
+
+Constraints:
+- Keep game logic separate from UI.
+- Keep content data separate from logic.
+- Do not hardcode scenario or card content in components.
+- Do not implement full gameplay yet.
+- Add tests only if the stack already has a test setup; otherwise note a recommended test setup.
+
+Done when:
+- Core data model exists in the appropriate game/domain folder.
+- Project compiles/builds.
+- Types support data-driven cards and scenarios.
+- The model supports risk, evidence, trust, pressure, and limited attention/time.
+
+Before coding:
+Inspect the current structure and propose a short plan.
+
+After coding:
+Summarize changed files, commands run, and risks.

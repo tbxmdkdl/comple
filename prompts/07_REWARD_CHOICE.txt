@@ -1,0 +1,30 @@
+Goal:
+Add a simple post-scenario reward choice.
+
+Context:
+Read AGENTS.md and docs/PROJECT_BRIEF.md. Use existing card data and scenario UI. Implement only a simple reward flow.
+
+Requirements:
+- After scenario success, show 3 card reward choices.
+- Player can choose 1 card.
+- Chosen card is added to the deck/run state.
+- Continue button proceeds to a placeholder next step or returns to start, depending on current app structure.
+
+Constraints:
+- Do not implement full run progression yet unless minimal state is required.
+- Do not add complex reward rarity logic.
+- Do not add animation.
+- Keep rewards data-driven.
+- Preserve existing playable scenario.
+
+Done when:
+- Reward screen appears after scenario success.
+- Selected card is added to the deck.
+- Build passes.
+- Manual test confirms the reward affects future draw/deck state or is visible in run state.
+
+Before coding:
+Inspect the current state flow and propose a short plan.
+
+After coding:
+Summarize changed files, tests run, and risks.

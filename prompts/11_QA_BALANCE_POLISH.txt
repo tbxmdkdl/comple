@@ -1,0 +1,34 @@
+Goal:
+QA, balance, and polish the MVP for an internal demo.
+
+Context:
+Read AGENTS.md and docs/PROJECT_BRIEF.md. Focus only on making the current MVP coherent and playable.
+
+Requirements:
+- Run build/test/typecheck commands.
+- Fix critical bugs.
+- Check for dead-end states.
+- Improve unclear card/scenario text.
+- Ensure a full 10–15 minute run is possible or close to possible.
+- Ensure educational feedback is short and contextual.
+- Ensure no unrequested backend/auth/analytics features were added.
+- Update README with how to run and play the MVP.
+
+Constraints:
+- Do not add major new systems.
+- Do not do broad refactors unless required to fix a critical bug.
+- Do not add complex animations.
+- Do not expand content excessively.
+
+Done when:
+- Build passes.
+- Tests pass where available.
+- A full manual playthrough is possible.
+- README is accurate.
+- Summary lists remaining known issues.
+
+Before coding:
+Inspect current project and propose a minimal QA plan.
+
+After coding:
+Summarize fixes, tests run, manual test result, and remaining risks.
