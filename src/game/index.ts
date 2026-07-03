@@ -59,3 +59,24 @@ export {
 } from "./deck";
 
 export type { DeckZoneName, DrawCardsOptions, DrawCardsResult, RandomSource } from "./deck";
+
+export {
+  advanceScenarioPressure,
+  appendDecisionLog,
+  applyCardCost,
+  applyCardEffects,
+  canPlayCard,
+  checkScenarioOutcome,
+  createDecisionLogEntry,
+  createInitialPlayerState,
+  endTurn,
+  playCard,
+  startScenario,
+  startTurn,
+} from "./scenario";
+
+export type {
+  CardPlayFailureReason,
+  InitialPlayerStateOptions,
+  PlayCardResult,
+} from "./scenario";
