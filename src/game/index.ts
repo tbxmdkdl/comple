@@ -80,3 +80,10 @@ export type {
   InitialPlayerStateOptions,
   PlayCardResult,
 } from "./scenario";
+
+export {
+  addRewardCardToDeck,
+  getCardRewardOptions,
+} from "./reward";
+
+export type { RewardDeckZoneName } from "./reward";

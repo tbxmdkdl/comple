@@ -83,5 +83,9 @@ function formatOutcome(outcome: ScenarioOutcome): string {
 }
 
 function formatUiText(text: string): string {
-  return text.replaceAll("증거", "증빙");
+  return text
+    .replaceAll("증거가", "증빙이")
+    .replaceAll("증거는", "증빙은")
+    .replaceAll("증거를", "증빙을")
+    .replaceAll("증거", "증빙");
 }

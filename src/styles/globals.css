@@ -89,6 +89,7 @@ p {
 .scenario-panel,
 .scenario-status,
 .hand-panel,
+.reward-panel,
 .side-panel {
   border: 1px solid #d3dce3;
   border-radius: 8px;
@@ -256,6 +257,7 @@ p {
 }
 
 .hand-panel,
+.reward-panel,
 .side-panel {
   padding: 18px;
 }
@@ -298,6 +300,7 @@ p {
 }
 
 .action-card:focus-visible,
+.reward-card:focus-visible,
 .primary-button:focus-visible,
 .secondary-button:focus-visible {
   outline: 3px solid #8bb7ff;
@@ -369,6 +372,89 @@ p {
 .side-panel {
   display: grid;
   gap: 14px;
+}
+
+.reward-panel {
+  display: grid;
+  gap: 16px;
+}
+
+.reward-heading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.reward-heading p {
+  margin-bottom: 0;
+  color: #566473;
+}
+
+.deck-size-chip {
+  flex: 0 0 auto;
+  padding: 8px 10px;
+  border: 1px solid #c7d2da;
+  border-radius: 999px;
+  background: #f6f8f9;
+  color: #27414d;
+  font-size: 0.88rem;
+}
+
+.reward-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.reward-card {
+  min-height: 260px;
+  padding: 14px;
+  border: 1px solid #c9d4dd;
+  border-radius: 8px;
+  background: #ffffff;
+  color: inherit;
+  text-align: left;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.reward-card:not(:disabled):hover {
+  border-color: #467a75;
+  box-shadow: 0 14px 28px rgb(24 32 42 / 12%);
+  transform: translateY(-2px);
+}
+
+.reward-card.selected {
+  border-color: #2f8f66;
+  background: #edf7f2;
+}
+
+.reward-select-label {
+  margin-top: auto;
+  color: #326c52;
+  font-size: 0.9rem;
+  font-weight: 900;
+}
+
+.reward-footer {
+  padding-top: 14px;
+  border-top: 1px solid #e2e7ec;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.reward-confirmation {
+  margin-bottom: 0;
+  color: #1f704d;
+  font-weight: 900;
 }
 
 .zone-counts,
@@ -472,6 +558,7 @@ p {
 
 @media (max-width: 960px) {
   .resource-panel,
+  .reward-options,
   .signal-grid,
   .play-area {
     grid-template-columns: 1fr;
@@ -488,6 +575,8 @@ p {
   }
 
   .top-bar,
+  .reward-footer,
+  .reward-heading,
   .section-heading,
   .outcome-banner {
     align-items: stretch;

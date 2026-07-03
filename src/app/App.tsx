@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { ActionCard } from "../components/ActionCard";
 import { ResourcePanel } from "../components/ResourcePanel";
+import { RewardChoice } from "../components/RewardChoice";
 import { ScenarioStatus } from "../components/ScenarioStatus";
 import {
   cards,
@@ -9,12 +10,14 @@ import {
   startingDeckCardIds,
 } from "../data";
 import {
+  addRewardCardToDeck,
   canPlayCard,
   createInitialPlayerState,
   createStartingDeck,
   discardHand,
   drawCards,
   endTurn,
+  getCardRewardOptions,
   playCard,
   startScenario,
   startTurn,
@@ -50,13 +53,27 @@ const metricLabels: Record<MetricKey, string> = {
 };
 
 export function App() {
-  const [run, setRun] = useState(() => createPlayableRun(firstScenario));
+  const [demoDeckCardIds, setDemoDeckCardIds] = useState<GameId[]>(() => [
+    ...startingDeckCardIds,
+  ]);
+  const [run, setRun] = useState(() =>
+    createPlayableRun(firstScenario, startingDeckCardIds),
+  );
   const [activityLog, setActivityLog] = useState<ActivityLogEntry[]>(() => [
     createLogEntry("시나리오가 시작되었습니다. 손패에서 조치를 선택하세요."),
   ]);
   const [feedbackIds, setFeedbackIds] = useState<GameId[]>([]);
+  const [activeRewardCardIds, setActiveRewardCardIds] = useState<GameId[]>([]);
+  const [selectedRewardCardId, setSelectedRewardCardId] = useState<GameId>();
 
   const cardsById = useMemo(() => new Map(cards.map((card) => [card.id, card])), []);
+  const activeRewardOptions = useMemo(
+    () =>
+      activeRewardCardIds
+        .map((cardId) => cardsById.get(cardId))
+        .filter((card): card is Card => card !== undefined),
+    [activeRewardCardIds, cardsById],
+  );
   const feedbackById = useMemo(
     () => new Map(learningFeedback.map((feedback) => [feedback.id, feedback])),
     [],
@@ -67,16 +84,19 @@ export function App() {
   const activeScenario = run.activeScenario;
   const outcome = activeScenario?.outcome ?? "unresolved";
   const isResolved = outcome !== "unresolved";
+  const showRewardChoice = outcome === "success";
   const latestFeedback = feedbackIds
     .map((feedbackId) => feedbackById.get(feedbackId)?.message)
     .map((message) => (message ? formatUiText(message) : message))
     .filter((message): message is string => Boolean(message));
 
   function resetScenario() {
-    setRun(createPlayableRun(firstScenario));
+    setRun(createPlayableRun(firstScenario, demoDeckCardIds));
     setFeedbackIds([]);
+    setActiveRewardCardIds([]);
+    setSelectedRewardCardId(undefined);
     setActivityLog([
-      createLogEntry("시나리오를 다시 시작했습니다. 첫 손패를 확인하세요."),
+      createLogEntry("현재 데모 덱을 유지한 채 시나리오를 다시 시작했습니다."),
     ]);
   }
 
@@ -101,7 +121,17 @@ export function App() {
 
     const latestDecision =
       result.state.decisionLog[result.state.decisionLog.length - 1];
-    const outcomeMessage = getOutcomeLog(result.state.activeScenario?.outcome);
+    const nextState: RunState =
+      result.state.activeScenario?.outcome === "success"
+        ? { ...result.state, phase: "reward" }
+        : result.state;
+    const outcomeMessage = getOutcomeLog(nextState.activeScenario?.outcome);
+
+    if (nextState.activeScenario?.outcome === "success") {
+      setActiveRewardCardIds(createRewardCardIds(demoDeckCardIds));
+      setSelectedRewardCardId(undefined);
+    }
+
     const nextEntries = [
       createLogEntry(
         `${formatUiText(card.name)} 조치를 실행했습니다. ${formatResourceChanges(latestDecision?.resourceChanges)}`,
@@ -110,7 +140,7 @@ export function App() {
       ...(outcomeMessage ? [createLogEntry(outcomeMessage.message, outcomeMessage.tone)] : []),
     ];
 
-    setRun(result.state);
+    setRun(nextState);
     setFeedbackIds(result.feedbackIds);
     setActivityLog((entries) => [...nextEntries, ...entries].slice(0, 8));
   }
@@ -125,11 +155,23 @@ export function App() {
       cardZones: discardHand(run.cardZones),
     };
     const afterPressure = endTurn(afterDiscard, firstScenario);
-    const outcomeMessage = getOutcomeLog(afterPressure.activeScenario?.outcome);
+    const pressureOutcome = afterPressure.activeScenario?.outcome ?? "unresolved";
+    const outcomeMessage = getOutcomeLog(pressureOutcome);
 
-    if (afterPressure.activeScenario?.outcome !== "unresolved") {
-      setRun(afterPressure);
+    if (pressureOutcome !== "unresolved") {
+      const resolvedState: RunState =
+        pressureOutcome === "success"
+          ? { ...afterPressure, phase: "reward" }
+          : afterPressure;
+
+      setRun(resolvedState);
       setFeedbackIds([]);
+
+      if (pressureOutcome === "success") {
+        setActiveRewardCardIds(createRewardCardIds(demoDeckCardIds));
+        setSelectedRewardCardId(undefined);
+      }
+
       setActivityLog((entries) =>
         [
           createLogEntry("턴을 넘기며 상황 압박이 반영되었습니다."),
@@ -161,6 +203,40 @@ export function App() {
     );
   }
 
+  function handleSelectReward(card: Card) {
+    if (selectedRewardCardId) {
+      return;
+    }
+
+    setSelectedRewardCardId(card.id);
+    setDemoDeckCardIds((cardIds) => [...cardIds, card.id]);
+    setRun((currentRun) => ({
+      ...currentRun,
+      phase: "reward",
+      cardZones: addRewardCardToDeck(currentRun.cardZones, card.id),
+    }));
+    setActivityLog((entries) =>
+      [
+        createLogEntry(`${formatUiText(card.name)} 카드가 덱에 추가되었습니다.`, "success"),
+        ...entries,
+      ].slice(0, 8),
+    );
+  }
+
+  function handleContinueAfterReward() {
+    const nextRun = createPlayableRun(firstScenario, demoDeckCardIds);
+
+    setRun(nextRun);
+    setActiveRewardCardIds([]);
+    setSelectedRewardCardId(undefined);
+    setFeedbackIds([]);
+    setActivityLog([
+      createLogEntry(
+        "다음 상황은 준비 중입니다. 업데이트된 덱으로 같은 상황을 다시 연습합니다.",
+      ),
+    ]);
+  }
+
   return (
     <main className="app-shell">
       <section className="workspace" aria-labelledby="app-title">
@@ -170,7 +246,7 @@ export function App() {
             <h1 id="app-title">업무 리스크 상황판</h1>
           </div>
           <button className="secondary-button" onClick={resetScenario} type="button">
-            시나리오 다시 시작
+            시나리오 다시 시작 (덱 유지)
           </button>
         </header>
 
@@ -199,7 +275,16 @@ export function App() {
           />
         ) : null}
 
-        <section className="play-area" aria-label="조치 선택">
+        {showRewardChoice ? (
+          <RewardChoice
+            deckSize={demoDeckCardIds.length}
+            onContinue={handleContinueAfterReward}
+            onSelect={handleSelectReward}
+            options={activeRewardOptions}
+            selectedCardId={selectedRewardCardId}
+          />
+        ) : (
+          <section className="play-area" aria-label="조치 선택">
           <div className="hand-panel">
             <div className="section-heading">
               <div>
@@ -276,19 +361,27 @@ export function App() {
               </ol>
             </section>
           </aside>
-        </section>
+          </section>
+        )}
       </section>
     </main>
   );
 }
 
-function createPlayableRun(scenario: Scenario): RunState {
+function createRewardCardIds(deckCardIds: readonly GameId[]): GameId[] {
+  return getCardRewardOptions(cards, deckCardIds).map((card) => card.id);
+}
+
+function createPlayableRun(
+  scenario: Scenario,
+  deckCardIds: readonly GameId[],
+): RunState {
   const baseRun: RunState = {
     id: "single-scenario-run",
     phase: "notStarted",
     nodeIndex: 0,
     player: createInitialPlayerState(),
-    cardZones: createStartingDeck(startingDeckCardIds),
+    cardZones: createStartingDeck(deckCardIds),
     availableRewardIds: [],
     completedScenarioIds: [],
     decisionLog: [],
@@ -410,5 +503,9 @@ function createLogEntry(
 }
 
 function formatUiText(text: string): string {
-  return text.replaceAll("증거", "증빙");
+  return text
+    .replaceAll("증거가", "증빙이")
+    .replaceAll("증거는", "증빙은")
+    .replaceAll("증거를", "증빙을")
+    .replaceAll("증거", "증빙");
 }
