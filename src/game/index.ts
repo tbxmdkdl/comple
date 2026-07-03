@@ -47,3 +47,15 @@ export type {
   TurnResourceKey,
   Upgrade,
 } from "./types";
+
+export {
+  createStartingDeck,
+  discardCard,
+  discardHand,
+  drawCards,
+  exhaustCard,
+  reshuffleDiscardIntoDraw,
+  shuffle,
+} from "./deck";
+
+export type { DeckZoneName, DrawCardsOptions, DrawCardsResult, RandomSource } from "./deck";
