@@ -20,6 +20,11 @@ export function ScenarioStatus({
 
   return (
     <section className="scenario-status" aria-label="상황 신호">
+      <div className="pressure-header">
+        <p className="eyebrow">압박 신호</p>
+        <strong>상황이 미는 방향</strong>
+      </div>
+
       <div className={`outcome-banner ${outcome}`}>
         <span>현재 상태</span>
         <strong>{formatOutcome(outcome)}</strong>

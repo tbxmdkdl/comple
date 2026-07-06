@@ -9,6 +9,11 @@ export type DrawCardsOptions = {
   reshuffleDiscard?: boolean;
 };
 
+export type CreateStartingDeckOptions = {
+  random?: RandomSource;
+  shuffle?: boolean;
+};
+
 export type DrawCardsResult = {
   state: CardZoneState;
   drawn: GameId[];
@@ -16,9 +21,16 @@ export type DrawCardsResult = {
 
 const defaultRandom: RandomSource = Math.random;
 
-export function createStartingDeck(cardIds: readonly GameId[]): CardZoneState {
+export function createStartingDeck(
+  cardIds: readonly GameId[],
+  options: CreateStartingDeckOptions = {},
+): CardZoneState {
+  const drawPile = options.shuffle
+    ? shuffle(cardIds, options.random)
+    : [...cardIds];
+
   return {
-    drawPile: [...cardIds],
+    drawPile,
     hand: [],
     discardPile: [],
     removedFromRun: [],

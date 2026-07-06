@@ -99,6 +99,21 @@ export {
 export type { RewardDeckZoneName } from "./reward";
 
 export {
+  applyRiskyProceed,
+  checkRiskCounter,
+  createInitialRiskExposure,
+} from "./risk";
+
+export type {
+  RiskCounterInput,
+  RiskCounterKind,
+  RiskCounterNotice,
+  RiskCounterResult,
+  RiskExposureState,
+  RiskyProceedResult,
+} from "./risk";
+
+export {
   addCardToRunDeck,
   createFixedRunNodes,
   getCurrentRunNode,

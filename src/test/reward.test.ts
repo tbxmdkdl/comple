@@ -27,6 +27,12 @@ function countCardIds(state: CardZoneState, cardId: string): number {
   ].filter((id) => id === cardId).length;
 }
 
+function sequenceRandom(values: number[]) {
+  let index = 0;
+
+  return () => values[index++] ?? 0;
+}
+
 describe("reward helpers", () => {
   it("returns exactly three deterministic card reward options", () => {
     const options = getCardRewardOptions(cards, startingDeckCardIds);
@@ -47,6 +53,20 @@ describe("reward helpers", () => {
     for (const option of options) {
       expect(cardIds.has(option.id)).toBe(true);
     }
+  });
+
+  it("can shuffle reward options when requested", () => {
+    const options = getCardRewardOptions(cards, startingDeckCardIds, 3, {
+      random: sequenceRandom([0.1, 0.7, 0.3, 0.2, 0.8, 0.4, 0.6, 0.5, 0.1]),
+      shuffle: true,
+    });
+
+    expect(options).toHaveLength(3);
+    expect(options.map((card) => card.id)).not.toEqual([
+      "minimum-data",
+      "approval-request",
+      "compliance-consult",
+    ]);
   });
 
   it("adds the selected reward card to the deck discard pile by default", () => {

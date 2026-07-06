@@ -68,7 +68,7 @@ export function ActionCard({
           {disabledReason}
         </span>
       ) : (
-        <span className="card-status-line card-play-hint">지금 실행 가능</span>
+        <span className="card-status-line card-play-hint">실행 가능</span>
       )}
     </button>
   );

@@ -40,6 +40,15 @@ describe("deck engine", () => {
     expect(state.drawPile).not.toBe(startingDeckCardIds);
   });
 
+  it("can shuffle the starting deck when requested", () => {
+    const state = createStartingDeck(["a", "b", "c", "d"], {
+      random: sequenceRandom([0.1, 0.7, 0.3]),
+      shuffle: true,
+    });
+
+    expect(state.drawPile).toEqual(["b", "d", "c", "a"]);
+  });
+
   it("uses only existing card ids in the starting deck", () => {
     const cardIds = new Set(cards.map((card) => card.id));
 
