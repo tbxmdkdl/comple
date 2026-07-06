@@ -72,7 +72,7 @@ export function FinalReport({ onReplay, report }: FinalReportProps) {
         </section>
 
         <section className="report-section wide">
-          <h3>실무 takeaway</h3>
+          <h3>실무 포인트</h3>
           <ul className="takeaway-list">
             {report.takeaways.map((takeaway) => (
               <li key={takeaway}>{takeaway}</li>
