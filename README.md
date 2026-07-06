@@ -1,41 +1,79 @@
 # Compliance Card Game MVP
 
-2-week MVP for a Korean user-facing workplace compliance card game.
+직장 내 컴플라이언스 판단을 카드 기반 선택으로 연습하는 2-week MVP입니다.
 
-## Commands
+플레이어는 이벤트와 업무 상황을 지나며 제한된 주의력으로 조치 카드를 사용하고, 리스크, 증빙, 신뢰, 압박을 관리합니다. 목표는 정답을 고르는 퀴즈가 아니라, 불완전한 정보와 압박 속에서 더 안전한 대응 흐름을 만들어 보는 것입니다.
 
-Install dependencies:
+## 설치
 
 ```bash
 npm install
 ```
 
-Start the development server:
+## 실행
+
+개발 서버:
 
 ```bash
 npm run dev
 ```
 
-Build for production:
-
-```bash
-npm run build
-```
-
-Run tests:
-
-```bash
-npm test
-```
-
-Run TypeScript checks:
+타입 검사:
 
 ```bash
 npm run typecheck
 ```
 
-## Current Scope
+테스트:
 
-The project is initialized with `React`, `TypeScript`, `Vite`, and `Vitest`.
+```bash
+npm test
+```
 
-This setup includes only a placeholder app shell. Gameplay systems, card data, scenario data, rewards, events, and final report logic are intentionally not implemented yet.
+프로덕션 빌드:
+
+```bash
+npm run build
+```
+
+## 플레이 방법
+
+1. `런 시작`을 누릅니다.
+2. 이벤트에서 짧은 선택을 합니다. 선택 결과는 다음 상황의 리스크, 증빙, 신뢰, 압박 또는 덱에 영향을 줍니다.
+3. 상황 화면에서 위험 신호와 압박 예고를 읽습니다.
+4. 손패의 조치 카드를 선택해 주의력을 쓰고 지표를 관리합니다.
+5. 필요하면 `턴 종료`로 다음 손패를 받습니다. 압박 예고가 지표에 반영될 수 있습니다.
+6. 상황을 해결하면 새 조치 카드 1장을 보상으로 선택합니다.
+7. 고정된 짧은 런을 끝까지 진행하면 최종 리포트를 확인합니다.
+8. 실패해도 최종 리포트가 표시되며, 다음 시도에서 무엇을 바꿀지 확인할 수 있습니다.
+
+## 현재 MVP 범위
+
+- React + TypeScript + Vite + Vitest 기반 정적 웹 앱
+- 고정된 짧은 런 흐름
+- 이벤트 3개
+- 시나리오 3개 플레이 흐름: 상황 1, 상황 2, 최종 상황
+- 카드 기반 조치 선택
+- 리스크, 증빙, 신뢰, 압박, 주의력 지표
+- 덱, 손패, 버림 더미 흐름
+- 상황 해결/실패 판정
+- 상황 해결 후 카드 보상 선택
+- 성공/실패 최종 리포트
+- replay/reset
+- 순수 game logic 중심 테스트
+
+## 알려진 제한
+
+- passive reward selection은 아직 없습니다.
+- card upgrade system은 아직 없습니다.
+- branching map과 procedural generation은 없습니다.
+- backend, auth, analytics, persistence, routing, external API는 없습니다.
+- 현재 콘텐츠는 MVP 데모용으로 작게 구성되어 있습니다.
+- 밸런스는 내부 데모가 가능한 수준의 초안이며, 장기 플레이 밸런싱은 별도 작업이 필요합니다.
+- 브라우저 세션 밖으로 진행 상태를 저장하지 않습니다.
+
+## 컴플라이언스 콘텐츠 고지
+
+이 프로젝트의 카드, 시나리오, 이벤트, 피드백, 최종 리포트는 일반적인 교육용 예시입니다. 특정 사건에 대한 법률 자문, 조사 결론, 징계 판단, 관할권별 법적 의무를 제공하지 않습니다.
+
+실제 배포 전에는 모든 사용자-facing 콘텐츠를 legal/compliance subject-matter experts가 검토해야 합니다.

@@ -71,7 +71,7 @@ export const cards: Card[] = [
   {
     id: "fact-memo",
     name: "사실 메모",
-    description: "요청과 맥락을 기록합니다. 증거는 늘지만 상대가 부담을 느낄 수 있습니다.",
+    description: "요청과 맥락을 기록합니다. 증빙은 늘지만 상대가 부담을 느낄 수 있습니다.",
     category: "document",
     tags: ["document", "evidenceBased", "trustCost"],
     cost: { attention: 1 },
@@ -109,7 +109,7 @@ export const cards: Card[] = [
   {
     id: "minimum-data",
     name: "최소 정보 원칙",
-    description: "필요한 정보만 다루도록 범위를 줄입니다. 증거가 있으면 더 안정적입니다.",
+    description: "필요한 정보만 다루도록 범위를 줄입니다. 증빙이 있으면 더 안정적입니다.",
     category: "protectData",
     tags: ["protectData", "riskReduction", "evidenceBased"],
     cost: { attention: 1 },
@@ -205,7 +205,7 @@ export const cards: Card[] = [
   {
     id: "compliance-consult",
     name: "컴플라이언스 상담",
-    description: "고위험 상황을 적절한 채널에 상의합니다. 증거가 있으면 더 강하지만 신뢰 비용이 생길 수 있습니다.",
+    description: "고위험 상황을 적절한 채널에 상의합니다. 증빙이 있으면 더 강하지만 신뢰 비용이 생길 수 있습니다.",
     category: "escalate",
     tags: ["escalate", "evidenceBased", "trustCost", "riskReduction"],
     cost: { attention: 2 },
@@ -301,7 +301,7 @@ export const cards: Card[] = [
   },
   {
     id: "preserve-evidence",
-    name: "증거 보존",
+    name: "증빙 보존",
     description: "장기 검토에 필요한 근거를 지킵니다. 당장은 압박이 조금 커질 수 있습니다.",
     category: "preserveEvidence",
     tags: ["preserveEvidence", "evidenceBased"],
@@ -321,7 +321,7 @@ export const cards: Card[] = [
   {
     id: "audit-ready",
     name: "감사 대비 정리",
-    description: "증거가 충분할 때 리스크와 압박을 함께 낮춥니다. 준비 전에는 효과가 제한됩니다.",
+    description: "증빙이 충분할 때 리스크와 압박을 함께 낮춥니다. 준비 전에는 효과가 제한됩니다.",
     category: "prepareAudit",
     tags: ["prepareAudit", "evidenceBased", "riskReduction"],
     cost: { attention: 2 },
@@ -517,7 +517,7 @@ export const cards: Card[] = [
   {
     id: "speak-up",
     name: "문제 제기",
-    description: "반복 압박이나 침묵 강요를 적절한 채널에 알립니다. 증거 보존과 함께 쓰면 안정적입니다.",
+    description: "반복 압박이나 침묵 강요를 적절한 채널에 알립니다. 증빙 보존과 함께 쓰면 안정적입니다.",
     category: "escalate",
     tags: ["escalate", "riskReduction", "pressureControl"],
     cost: { attention: 2 },
@@ -537,7 +537,7 @@ export const cards: Card[] = [
   {
     id: "clean-exit",
     name: "깔끔한 종료",
-    description: "리스크가 낮고 증거가 충분할 때 상황을 안전하게 마무리합니다. 준비 부족이면 압박이 남습니다.",
+    description: "리스크가 낮고 증빙이 충분할 때 상황을 안전하게 마무리합니다. 준비 부족이면 압박이 남습니다.",
     category: "prepareAudit",
     tags: ["prepareAudit", "evidenceBased", "riskReduction"],
     cost: { attention: 2 },

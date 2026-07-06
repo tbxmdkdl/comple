@@ -17,6 +17,7 @@ export function FinalReport({ onReplay, report }: FinalReportProps) {
         <div>
           <p className="eyebrow">최종 리포트</p>
           <h2>{report.headline}</h2>
+          <span className="risk-summary-label">리스크 관리 요약</span>
           <p>{report.riskSummary}</p>
         </div>
         <div className="grade-card" aria-label="런 결과 등급">

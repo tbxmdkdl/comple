@@ -56,7 +56,7 @@ export const passives: Passive[] = [
   {
     id: "evidence-based-firmness",
     name: "근거 있는 단호함",
-    description: "증거가 충분할 때 거절의 관계 비용을 줄입니다.",
+    description: "증빙이 충분할 때 거절의 관계 비용을 줄입니다.",
     trigger: "beforeCardPlay",
     complianceTopics: ["generalCompliance"],
     effects: [
