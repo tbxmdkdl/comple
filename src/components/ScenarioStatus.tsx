@@ -31,7 +31,7 @@ export function ScenarioStatus({
       </div>
 
       <div className="signal-grid">
-        <div className="signal-column">
+        <div className="signal-column risk-signal-column">
           <h2>위험 신호</h2>
           {visibleSignals.length > 0 ? (
             visibleSignals.map((signal) => (
@@ -42,7 +42,7 @@ export function ScenarioStatus({
           )}
         </div>
 
-        <div className="signal-column">
+        <div className="signal-column pressure-signal-column">
           <h2>압박 예고</h2>
           {visibleIntents.length > 0 ? (
             visibleIntents.map((intent) => (
@@ -65,7 +65,7 @@ function SignalItem({ signal }: { signal: ScenarioPressureSignal }) {
     <article className="signal-item">
       <strong>{formatUiText(signal.label)}</strong>
       <p>{formatUiText(signal.description)}</p>
-      <span>심각도 {signal.severity}</span>
+      <span className="signal-severity">심각도 {signal.severity}</span>
     </article>
   );
 }

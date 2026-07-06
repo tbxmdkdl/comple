@@ -76,8 +76,11 @@ export function RewardChoice({
               onClick={() => onSelect(card)}
               type="button"
             >
-              <span className="card-cost">{formatCost(card)}</span>
-              <span className="card-category">{categoryLabels[card.category]}</span>
+              <span className="card-kind">덱에 추가할 조치</span>
+              <span className="card-meta-row">
+                <span className="card-cost">{formatCost(card)}</span>
+                <span className="card-category">{categoryLabels[card.category]}</span>
+              </span>
               <strong className="card-title">{formatUiText(card.name)}</strong>
               <span className="card-effect">{formatUiText(card.description)}</span>
               <span className="card-tags">{formatUiText(formatTags(card))}</span>

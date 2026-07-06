@@ -456,21 +456,23 @@ export function App() {
 
         {showEventNode ? (
           <>
-            <EventNode
-              consequence={eventConsequence}
-              deckSize={demoDeckCardIds.length}
-              event={currentEvent}
-              onContinue={handleContinueAfterEvent}
-              onSelect={handleSelectEventChoice}
-              selectedChoiceId={selectedEventChoiceId}
-            />
+            <div className="event-board">
+              <EventNode
+                consequence={eventConsequence}
+                deckSize={demoDeckCardIds.length}
+                event={currentEvent}
+                onContinue={handleContinueAfterEvent}
+                onSelect={handleSelectEventChoice}
+                selectedChoiceId={selectedEventChoiceId}
+              />
 
-            <ResourcePanel
-              maxAttention={run.player.maxAttention}
-              maxTime={run.player.maxTime}
-              resources={run.player.resources}
-              turnResource={run.player.turnResource}
-            />
+              <ResourcePanel
+                maxAttention={run.player.maxAttention}
+                maxTime={run.player.maxTime}
+                resources={run.player.resources}
+                turnResource={run.player.turnResource}
+              />
+            </div>
 
             <section className="event-state-grid" aria-label="이벤트 적용 상태">
               <section className="zone-counts event-state-card" aria-label="덱 상태">
@@ -503,30 +505,34 @@ export function App() {
 
         {showScenarioWorkspace ? (
           <>
-            <section className="scenario-panel" aria-label="현재 시나리오">
-              <div>
-                <p className="eyebrow">{currentRunNode.title}</p>
-                <h2>{formatUiText(currentScenario.title)}</h2>
-                <p className="scenario-copy">{formatUiText(currentScenario.summary)}</p>
-                <p className="scenario-setup">{formatUiText(currentScenario.setup)}</p>
+            <section className="scenario-board" aria-label="상황 판단판">
+              <div className="scenario-main-stack">
+                <section className="scenario-panel" aria-label="현재 시나리오">
+                  <div>
+                    <p className="eyebrow">{currentRunNode.title}</p>
+                    <h2>{formatUiText(currentScenario.title)}</h2>
+                    <p className="scenario-copy">{formatUiText(currentScenario.summary)}</p>
+                    <p className="scenario-setup">{formatUiText(currentScenario.setup)}</p>
+                  </div>
+                </section>
+
+                <ResourcePanel
+                  maxAttention={run.player.maxAttention}
+                  maxTime={run.player.maxTime}
+                  resources={run.player.resources}
+                  turnResource={run.player.turnResource}
+                />
               </div>
+
+              {activeScenario ? (
+                <ScenarioStatus
+                  activeSignalIds={activeScenario.activeSignalIds}
+                  outcome={activeScenario.outcome}
+                  scenario={currentScenario}
+                  turnNumber={activeScenario.turnNumber}
+                />
+              ) : null}
             </section>
-
-            <ResourcePanel
-              maxAttention={run.player.maxAttention}
-              maxTime={run.player.maxTime}
-              resources={run.player.resources}
-              turnResource={run.player.turnResource}
-            />
-
-            {activeScenario ? (
-              <ScenarioStatus
-                activeSignalIds={activeScenario.activeSignalIds}
-                outcome={activeScenario.outcome}
-                scenario={currentScenario}
-                turnNumber={activeScenario.turnNumber}
-              />
-            ) : null}
 
             {showRewardChoice ? (
               <RewardChoice

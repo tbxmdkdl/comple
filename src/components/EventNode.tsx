@@ -52,7 +52,7 @@ export function EventNode({
               type="button"
             >
               <strong>{choice.label}</strong>
-              <span>{choice.consequence}</span>
+              <span className="event-consequence-copy">{choice.consequence}</span>
               <span className="event-effect-summary">
                 {formatEventEffects(choice.effects)}
               </span>

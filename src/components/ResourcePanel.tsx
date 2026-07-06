@@ -66,8 +66,10 @@ export function ResourcePanel({
 
         return (
           <article className={`resource-chip ${metric.tone}`} key={metric.key}>
-            <span className="resource-label">{metric.label}</span>
-            <strong className="resource-value">{valueText}</strong>
+            <span className="resource-head">
+              <span className="resource-label">{metric.label}</span>
+              <strong className="resource-value">{valueText}</strong>
+            </span>
             <span className="resource-helper">{metric.helper}</span>
           </article>
         );

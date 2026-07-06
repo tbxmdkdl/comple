@@ -58,18 +58,18 @@ p {
 
 .app-shell {
   min-height: 100vh;
-  padding: 24px;
+  padding: 18px;
 }
 
 .workspace {
-  width: min(1240px, 100%);
+  width: min(1360px, 100%);
   margin: 0 auto;
   display: grid;
-  gap: 16px;
+  gap: 14px;
 }
 
 .top-bar {
-  padding: 20px 22px;
+  padding: 14px 18px;
   border: 1px solid #d3dce3;
   border-radius: 8px;
   background: #ffffff;
@@ -101,11 +101,11 @@ p {
 }
 
 .run-progress {
-  padding: 16px 18px;
+  padding: 12px 14px;
   display: grid;
-  grid-template-columns: minmax(140px, 0.55fr) minmax(0, 2.2fr) auto;
+  grid-template-columns: minmax(130px, 0.5fr) minmax(0, 2.5fr) auto;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 
 .run-progress strong {
@@ -123,7 +123,7 @@ p {
 }
 
 .run-step {
-  min-height: 50px;
+  min-height: 46px;
   padding: 8px 10px;
   border: 1px solid #dce3e8;
   border-radius: 8px;
@@ -180,7 +180,8 @@ p {
 }
 
 .scenario-panel {
-  padding: 22px;
+  padding: 20px;
+  border-left: 5px solid #467a75;
 }
 
 .scenario-panel h2 {
@@ -202,20 +203,27 @@ p {
 
 .resource-panel {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+  gap: 8px;
 }
 
 .resource-chip {
-  min-height: 86px;
+  min-height: 74px;
   min-width: 0;
-  padding: 12px;
+  padding: 10px 12px;
   border: 1px solid #d3dce3;
   border-left-width: 4px;
   border-radius: 8px;
   background: #ffffff;
   display: grid;
   gap: 4px;
+}
+
+.resource-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
 }
 
 .resource-chip.risk {
@@ -246,7 +254,7 @@ p {
 
 .resource-value {
   color: #18202a;
-  font-size: 1.7rem;
+  font-size: 1.55rem;
   line-height: 1;
 }
 
@@ -257,13 +265,42 @@ p {
 }
 
 .scenario-status {
-  padding: 18px;
+  padding: 16px;
   display: grid;
   gap: 14px;
 }
 
+.event-board,
+.scenario-board {
+  display: grid;
+  gap: 14px;
+  align-items: start;
+}
+
+.event-board {
+  grid-template-columns: minmax(0, 1.55fr) minmax(320px, 0.85fr);
+}
+
+.scenario-board {
+  grid-template-columns: minmax(0, 1.45fr) minmax(340px, 0.85fr);
+}
+
+.scenario-main-stack {
+  display: grid;
+  gap: 10px;
+}
+
+.scenario-board .scenario-status {
+  position: sticky;
+  top: 14px;
+}
+
+.scenario-board .signal-grid {
+  grid-template-columns: 1fr;
+}
+
 .outcome-banner {
-  padding: 12px 14px;
+  padding: 10px 12px;
   border: 1px solid #d3dce3;
   border-radius: 8px;
   background: #f6f8f9;
@@ -309,10 +346,18 @@ p {
 }
 
 .signal-item {
-  padding: 12px;
+  padding: 11px 12px;
   border: 1px solid #dce3e8;
   border-radius: 8px;
   background: #fbfcfd;
+}
+
+.risk-signal-column .signal-item {
+  border-left: 4px solid #b84a4a;
+}
+
+.pressure-signal-column .signal-item {
+  border-left: 4px solid #b86b23;
 }
 
 .signal-item strong {
@@ -332,10 +377,18 @@ p {
   font-weight: 800;
 }
 
+.signal-severity {
+  display: inline-flex;
+  width: fit-content;
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: #f3e8e2;
+}
+
 .play-area {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 320px;
-  gap: 16px;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 14px;
   align-items: start;
 }
 
@@ -343,7 +396,11 @@ p {
 .event-panel,
 .reward-panel,
 .side-panel {
-  padding: 18px;
+  padding: 16px;
+}
+
+.hand-panel {
+  background: #fbfcfd;
 }
 
 .state-panel {
@@ -548,7 +605,7 @@ p {
 }
 
 .section-heading {
-  margin-bottom: 14px;
+  margin-bottom: 12px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -557,25 +614,30 @@ p {
 
 .hand-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(168px, 1fr));
+  gap: 10px;
 }
 
 .action-card {
-  min-height: 235px;
-  padding: 13px;
+  min-height: 220px;
+  padding: 12px;
   border: 1px solid #c9d4dd;
   border-radius: 8px;
   background: #ffffff;
   color: inherit;
   text-align: left;
   display: grid;
-  align-content: start;
-  gap: 9px;
+  grid-template-rows: auto auto auto minmax(0, 1fr) auto auto;
+  align-content: stretch;
+  gap: 8px;
   transition:
     border-color 160ms ease,
     box-shadow 160ms ease,
     transform 160ms ease;
+}
+
+.action-card.is-playable {
+  border-color: #b7cbd1;
 }
 
 .action-card:not(:disabled):hover {
@@ -598,6 +660,19 @@ p {
   border-style: dashed;
   color: #697785;
   opacity: 0.78;
+}
+
+.card-kind {
+  color: #667585;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0;
+}
+
+.card-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
 .card-cost {
@@ -657,9 +732,16 @@ p {
   font-weight: 800;
 }
 
+.card-status-line {
+  padding-top: 8px;
+  border-top: 1px solid #e2e7ec;
+}
+
 .side-panel {
   display: grid;
   gap: 14px;
+  position: sticky;
+  top: 14px;
 }
 
 .event-panel {
@@ -686,8 +768,8 @@ p {
 }
 
 .event-choice {
-  min-height: 190px;
-  padding: 14px;
+  min-height: 178px;
+  padding: 13px;
   border: 1px solid #c9d4dd;
   border-radius: 8px;
   background: #ffffff;
@@ -724,7 +806,16 @@ p {
   line-height: 1.5;
 }
 
+.event-consequence-copy {
+  min-height: 48px;
+}
+
 .event-effect-summary {
+  width: fit-content;
+  max-width: 100%;
+  padding: 6px 8px;
+  border-radius: 999px;
+  background: #edf7f2;
   color: #27645f;
   font-weight: 900;
 }
@@ -787,16 +878,17 @@ p {
 }
 
 .reward-card {
-  min-height: 260px;
-  padding: 14px;
+  min-height: 248px;
+  padding: 13px;
   border: 1px solid #c9d4dd;
   border-radius: 8px;
   background: #ffffff;
   color: inherit;
   text-align: left;
   display: grid;
-  align-content: start;
-  gap: 10px;
+  grid-template-rows: auto auto auto minmax(0, 1fr) auto auto;
+  align-content: stretch;
+  gap: 8px;
   transition:
     border-color 160ms ease,
     box-shadow 160ms ease,
@@ -939,6 +1031,7 @@ p {
 
 @media (max-width: 960px) {
   .resource-panel,
+  .event-board,
   .event-options,
   .event-state-grid,
   .report-grid,
@@ -947,13 +1040,16 @@ p {
   .reward-options,
   .run-progress,
   .run-track,
+  .scenario-board,
   .signal-grid,
   .play-area {
     grid-template-columns: 1fr;
   }
 
+  .scenario-board .scenario-status,
   .side-panel {
     order: 2;
+    position: static;
   }
 }
 

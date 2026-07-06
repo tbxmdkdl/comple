@@ -50,20 +50,25 @@ export function ActionCard({
 
   return (
     <button
-      className="action-card"
+      className={`action-card ${disabled ? "is-disabled" : "is-playable"}`}
       disabled={disabled}
       onClick={onPlay}
       type="button"
     >
-      <span className="card-cost">{formatCost(card.cost)}</span>
-      <span className="card-category">{categoryLabels[card.category]}</span>
+      <span className="card-kind">조치 카드</span>
+      <span className="card-meta-row">
+        <span className="card-cost">{formatCost(card.cost)}</span>
+        <span className="card-category">{categoryLabels[card.category]}</span>
+      </span>
       <strong className="card-title">{formatUiText(card.name)}</strong>
       <span className="card-effect">{formatUiText(card.description)}</span>
       <span className="card-tags">{formatUiText(tags.join(" · "))}</span>
       {disabledReason ? (
-        <span className="card-disabled-reason">{disabledReason}</span>
+        <span className="card-status-line card-disabled-reason">
+          {disabledReason}
+        </span>
       ) : (
-        <span className="card-play-hint">클릭해서 조치 실행</span>
+        <span className="card-status-line card-play-hint">지금 실행 가능</span>
       )}
     </button>
   );
