@@ -3,6 +3,7 @@ import type { Event, EventChoice, EventEffect, GameId, MetricKey } from "../game
 type EventNodeProps = {
   deckSize: number;
   event: Event;
+  illustrationSrc?: string;
   selectedChoiceId?: GameId;
   consequence?: string;
   onContinue: () => void;
@@ -22,6 +23,7 @@ export function EventNode({
   consequence,
   deckSize,
   event,
+  illustrationSrc,
   onContinue,
   onSelect,
   selectedChoiceId,
@@ -38,6 +40,12 @@ export function EventNode({
         </div>
         <strong className="deck-size-chip">현재 덱 {deckSize}장</strong>
       </div>
+
+      {illustrationSrc ? (
+        <figure className="event-illustration">
+          <img alt="" src={illustrationSrc} />
+        </figure>
+      ) : null}
 
       <div className="event-options" aria-label="이벤트 선택지">
         {event.choices.map((choice) => {

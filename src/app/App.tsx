@@ -101,6 +101,24 @@ const metricLabels: Record<MetricKey, string> = {
   time: "시간",
 };
 
+const gameArt = {
+  background: "/assets/game-art/office-risk-room-bg.webp",
+  player: "/assets/game-art/player-compliance-employee.webp",
+  cardBack: "/assets/game-art/card-back-compliance.webp",
+  actors: {
+    client: "/assets/game-art/actor-contract-client.webp",
+    colleague: "/assets/game-art/actor-rushed-coworker.webp",
+    manager: "/assets/game-art/actor-deadline-manager.webp",
+    social: "/assets/game-art/actor-social-pressure.webp",
+    vendor: "/assets/game-art/actor-vendor-gift.webp",
+  },
+  events: {
+    "deadline-choice": "/assets/game-art/event-deadline-choice.webp",
+    "lunch-briefing": "/assets/game-art/event-lunch-briefing.webp",
+    "organize-notes": "/assets/game-art/event-organize-notes.webp",
+  },
+} as const;
+
 export function App() {
   const initialEventMemory = createInitialEventRunMemory();
   const [flowPhase, setFlowPhase] = useState<FixedRunPhase>("intro");
@@ -627,6 +645,7 @@ export function App() {
                 consequence={eventConsequence}
                 deckSize={demoDeckCardIds.length}
                 event={currentEvent}
+                illustrationSrc={getEventIllustrationSrc(currentEvent.id)}
                 onContinue={handleContinueAfterEvent}
                 onSelect={handleSelectEventChoice}
                 selectedChoiceId={selectedEventChoiceId}
@@ -725,15 +744,11 @@ export function App() {
                     </div>
                     <div className="encounter-stage" aria-label="상황 대응 구도">
                       <div className="actor-card player-actor">
-                        <div className="pixel-person player-person" aria-hidden="true">
-                          <span className="person-head" />
-                          <span className="person-hair" />
-                          <span className="person-body" />
-                          <span className="person-arm left" />
-                          <span className="person-arm right" />
-                          <span className="person-leg left" />
-                          <span className="person-leg right" />
-                        </div>
+                        <img
+                          alt=""
+                          className="actor-sprite player-sprite"
+                          src={gameArt.player}
+                        />
                         <strong>나의 대응팀</strong>
                         <span>증빙 {run.player.resources.evidence} · 신뢰 {run.player.resources.trust}</span>
                       </div>
@@ -748,16 +763,11 @@ export function App() {
                       </div>
 
                       <div className="actor-card pressure-actor">
-                        <div className={`pixel-person pressure-person ${pressureActor.tone}`} aria-hidden="true">
-                          <span className="person-head" />
-                          <span className="person-hair" />
-                          <span className="person-body" />
-                          <span className="person-arm left" />
-                          <span className="person-arm right" />
-                          <span className="person-leg left" />
-                          <span className="person-leg right" />
-                          <span className="prop" />
-                        </div>
+                        <img
+                          alt=""
+                          className="actor-sprite pressure-sprite"
+                          src={pressureActor.imageSrc}
+                        />
                         <strong>{pressureActor.label}</strong>
                         <span>리스크 {run.player.resources.risk} · 압박 {run.player.resources.pressure}</span>
                       </div>
@@ -1235,28 +1245,56 @@ function formatRemainingGoals(
   return remaining.length > 0 ? remaining.join(" · ") : "목표 조건 충족";
 }
 
-function getPressureActor(scenario: Scenario): { label: string; tone: string } {
+function getEventIllustrationSrc(eventId: GameId): string | undefined {
+  return gameArt.events[eventId as keyof typeof gameArt.events];
+}
+
+function getPressureActor(scenario: Scenario): { imageSrc: string; label: string; tone: string } {
   if (scenario.id.includes("vendor-gift")) {
-    return { label: "협력사 담당자", tone: "vendor" };
+    return {
+      imageSrc: gameArt.actors.vendor,
+      label: "협력사 담당자",
+      tone: "vendor",
+    };
   }
 
   if (scenario.id.includes("personal-data")) {
-    return { label: "급한 동료", tone: "colleague" };
+    return {
+      imageSrc: gameArt.actors.colleague,
+      label: "급한 동료",
+      tone: "colleague",
+    };
   }
 
   if (scenario.id.includes("expense")) {
-    return { label: "마감 압박 상사", tone: "manager" };
+    return {
+      imageSrc: gameArt.actors.manager,
+      label: "마감 압박 상사",
+      tone: "manager",
+    };
   }
 
   if (scenario.id.includes("family-vendor")) {
-    return { label: "추천 압박 관계자", tone: "vendor" };
+    return {
+      imageSrc: gameArt.actors.vendor,
+      label: "추천 압박 관계자",
+      tone: "vendor",
+    };
   }
 
   if (scenario.id.includes("retaliation")) {
-    return { label: "침묵을 바라는 분위기", tone: "manager" };
+    return {
+      imageSrc: gameArt.actors.social,
+      label: "침묵을 바라는 분위기",
+      tone: "social",
+    };
   }
 
-  return { label: "계약 압박 고객", tone: "client" };
+  return {
+    imageSrc: gameArt.actors.client,
+    label: "계약 압박 고객",
+    tone: "client",
+  };
 }
 
 function createDialogueExchange(
